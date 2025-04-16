@@ -2,6 +2,7 @@
 
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
+import Stripe from 'stripe'
 
 const ONE_WEEK= 60 * 60 * 24 * 7 ;
 export async function signUp(params: SignUpParams) {
@@ -102,6 +103,7 @@ export async function getCurrentUser(): Promise<User | null> {
             ...userRecord.data(),
             id: userRecord.id,
         } as User;
+
     } catch (e) {
         console.log(e)
 
@@ -113,3 +115,5 @@ export async function isAuthenticated(){
     const user = await getCurrentUser();
     return !!user; 
 }
+
+

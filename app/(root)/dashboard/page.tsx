@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button } from '../components/ui/button'
+import { Button } from '../../components/ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
-import InterviewCard from '../components/InterviewCard'
+import InterviewCard from '../../components/InterviewCard'
 import { getInterviewsByUserId, getLatestInterviews } from '@/lib/actions/generalaction'
 import { getCurrentUser } from '@/lib/actions/authaction' 
 
