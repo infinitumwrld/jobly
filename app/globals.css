@@ -296,13 +296,28 @@
 }
 
 @layer components {
-  .btn-call {
-    @apply inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer items-center justify-center overflow-visible;
-
-    .span {
-      @apply bg-success-100 h-[85%] w-[65%];
+    
+    .btn-call {
+      @apply inline-flex px-7 py-3 font-bold text-sm leading-5 text-white transition-all duration-300 rounded-full shadow-md min-w-28 cursor-pointer items-center justify-center overflow-visible;
+      background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
-  }
+    
+    .btn-call:hover {
+      @apply shadow-lg transform scale-[1.03];
+      background: linear-gradient(135deg, #43A047 0%, #2E7D32 100%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    
+    .btn-call:active {
+      @apply transform scale-[0.98] shadow-inner;
+    }
+    
+    .btn-call .span {
+      @apply h-[85%] w-[65%];
+      background: rgba(76, 175, 80, 0.5);
+    }
+  
 
   .btn-disconnect {
     @apply inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28;
@@ -403,7 +418,12 @@
   }
 
   .card-cta {
-    @apply flex flex-row blue-gradient-dark rounded-3xl px-16 py-6 items-center justify-between max-sm:px-4;
+    @apply flex flex-row blue-gradient-dark rounded-3xl px-16 py-6 items-center justify-between max-sm:px-4 shadow-lg border border-purple-500/30 transition-all duration-300 ;
+    background: linear-gradient(100deg, rgba(114, 97, 238, 0.15) 0%, rgba(128, 107, 255, 0.25) 50%, rgba(138, 124, 255, 0.4) 100%);
+  }
+
+  .card-cta:hover {
+    @apply shadow-purple-500/20 border-purple-400/40 transform scale-[1.01];
   }
 
   .interviews-section {

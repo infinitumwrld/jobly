@@ -424,7 +424,7 @@ export const dummyInterviews: Interview[] = [
       id: "0",
       title: "Pro",
       priceMonthly: 49,
-      priceId: "price_1RDxnpEbkgNqj4nWdToOq93z" ,
+      priceId: "price_1RD8nBEbkgNqj4nWZFTU8syW" ,
       priceYearly: 39,
       caption: "For Serious Preparation",
       features: [
@@ -453,7 +453,7 @@ export const dummyInterviews: Interview[] = [
     },
     {
       id: "2",
-      title: "College/School ",
+      title: "Institution",
       priceId: "price_1RD8ugEbkgNqj4nW3N2bIK76" ,
       priceMonthly: 799,
       priceYearly: 690,

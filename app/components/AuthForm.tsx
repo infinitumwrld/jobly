@@ -76,7 +76,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           })
 
           toast.success('Sign in successfully.'); 
-          router.push('/dashboard')
+          router.push('/#pricing')
         }
     } catch (error) {
         console.log(error);
@@ -90,12 +90,10 @@ const AuthForm = ({ type }: { type: FormType }) => {
     <div className="card-border lg:min-w-[566px]">
         <div className="flex flex-col gap-6 card py-14 px-10">
                 <div className="flex flex-row gap-2 justify-center">
-                    <Image src="/logo.svg" alt="logo" height={32} width={38} />
-
-                    <h2 className="text-primary-100 "> Jobly </h2>
+                    <Image src="/logo.png" alt="logo" height={200} width={200} />
 
                 </div>
-                <h3>Practice job interviews with the most advanced AI</h3>
+                <h3 className="text-center mx-auto">Get interview-ready with the smartest AI <br/> built for landing tech jobs</h3>
             
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6 mt-4 form">

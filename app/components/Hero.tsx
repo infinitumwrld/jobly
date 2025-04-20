@@ -19,7 +19,7 @@ const Hero = () => {
                  Skill Set Gets You There, Faster.
                  <span></span>
                 </h2>
-                <TextGenerateEffect className='text-center text-[40px] md:text-5xl lg:text-6xl' words='Real conversations. Real-time coaching.
+                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Real conversations. Real-time coaching.
                     The kind of prep that actually gets you hired.' />
 
                 <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
