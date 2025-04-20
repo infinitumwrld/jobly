@@ -112,7 +112,7 @@ export const InfiniteMovingCards = ({
                 {/* add this div for the profile img */}
                 <span className="flex flex-col gap-1">
                   <div className="me-3">
-                  <img src="" alt="" />
+                  
                 </div>
                 <div className="flex flex-col gap-1">
                   {/* change text color, font-normal to font-bold, text-xl */}
