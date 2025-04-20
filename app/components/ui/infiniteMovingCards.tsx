@@ -82,7 +82,7 @@ export const InfiniteMovingCards = ({
         ref={scrollerRef}
         className={cn(
           // change gap-16
-          " flex min-w-full shrink-0 gap-16 py-20 pb-30 w-max flex-nowrap",
+          " flex min-w-full shrink-0 gap-16 py-20 pb-30 w-max flex-nowrap list-none",
           start && "animate-scroll ",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}
@@ -102,7 +102,7 @@ export const InfiniteMovingCards = ({
             <blockquote>
               <div
                 aria-hidden="true"
-                className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5 h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
+                className="user-select-none -z-1 pointer-events-none absolute -left-0.5 -top-0.5  h-[calc(100%_+_4px)] w-[calc(100%_+_4px)]"
               ></div>
               {/* change text color, text-lg */}
               <span className=" relative z-20 text-sm md:text-lg leading-[1.6] text-white font-normal">
@@ -112,7 +112,7 @@ export const InfiniteMovingCards = ({
                 {/* add this div for the profile img */}
                 <span className="flex flex-col gap-1">
                   <div className="me-3">
-                  <img src="/s.svg" alt="profile" />
+                  <img src="" alt="" />
                 </div>
                 <div className="flex flex-col gap-1">
                   {/* change text color, font-normal to font-bold, text-xl */}

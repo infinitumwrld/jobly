@@ -414,7 +414,7 @@ export const dummyInterviews: Interview[] = [
     },
     {
       id: 3,
-      img: "/link.svg",
+      img: "/instagram-white-icon.png",
       url: ''
     },
   ];
@@ -428,7 +428,7 @@ export const dummyInterviews: Interview[] = [
       priceYearly: 39,
       caption: "For Serious Preparation",
       features: [
-        "Unlimited mock interviews",
+        "Unlimited interviews",
         "Advanced feedback on each session",
         "Tailored to tech and CS roles",
         "Priority support",
@@ -460,7 +460,7 @@ export const dummyInterviews: Interview[] = [
       caption: "Exclusively for teams",
       features: [
         "Access for multiple students at a discounted rate",
-        "Unlimited mock interviews and feedback for each student",
+        "Unlimited interviews and feedback for each student",
         "Customizable packages to fit the institution’s needs",
       ],
       icon: "/images/hexagon.svg",

@@ -12,19 +12,22 @@ const monaSans = Mona_Sans({
 export const metadata: Metadata = {
   title: "SkillSet",
   description: "An AI-powered platform for preparing for mock interviews",
-};
+  icons: {
+    icon: '/favi.png'
+  }
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) {  
   return (
     <html lang="en" className="dark">
       <body className={`${monaSans.className} antialiased pattern`}>
         {children}
 
-        <Toaster />
+        <Toaster /> 
       </body>
     </html>
   );
