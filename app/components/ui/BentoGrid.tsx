@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { IoCopyOutline } from "react-icons/io5";
 
 // Also install this npm i --save-dev @types/react-lottie
@@ -58,6 +59,7 @@ export const BentoGridItem = ({
   const rightLists = ["VueJS", "NuxtJS", "GraphQL"];
 
   const [copied, setCopied] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const defaultOptions = {
     loop: copied,
@@ -68,6 +70,9 @@ export const BentoGridItem = ({
     },
   };
 
+  useEffect(() => {
+    setIsClient(true);  // This will be triggered after the component mounts
+  }, []);  // Empty dependency array ensures this only runs once after the component mounts
 
   const handleClick = () => {
     // Redirect to the pricing section by using the hash in the URL
@@ -100,8 +105,7 @@ export const BentoGridItem = ({
           )}
         </div>
         <div
-          className={`absolute right-0 -bottom-5 ${id === 5 && "w-full opacity-80"
-            } `}
+          className={`absolute right-0 -bottom-5 ${id === 5 && "w-full opacity-80"}  `}
         >
           {spareImg && (
             <img
@@ -177,11 +181,10 @@ export const BentoGridItem = ({
               {/* remove focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 */}
               {/* add handleCopy() for the copy the text */}
               <div
-                className={`absolute -bottom-5 right-0 ${copied ? "block" : "block"
-                  }`}
+                className={`absolute -bottom-5 right-0 ${copied ? "block" : "block"}`}
               >
                 {/* <img src="/confetti.gif" alt="confetti" /> */}
-                <Lottie options={defaultOptions} height={200} width={400} />
+               {/* <Lottie options={defaultOptions} height={200} width={400} /> */}
               </div>
 
               <MagicButton
