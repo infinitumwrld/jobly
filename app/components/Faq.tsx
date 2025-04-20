@@ -30,7 +30,7 @@ function Accordion() {
         </h1>
             <div className='accordion '>
                 <section className='accordion-heading'>
-                    <img src='/faq.png' height={100} width={100} alt="" />
+                    <Image src='/faq.png' height={100} width={100} alt="questions" />
                     <h1>FAQs</h1> 
                 </section>
 
