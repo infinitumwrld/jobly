@@ -703,7 +703,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(255, 255, 255, 0.7),
+    rgba(184, 184, 184, 0.7),
     transparent
   );
 }
@@ -715,7 +715,7 @@
   background: linear-gradient(
     to left,
     transparent,
-    rgba(255, 255, 255, 0.7),
+    rgba(165, 165, 165, 0.7),
     transparent
   );
 }
@@ -748,7 +748,7 @@
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 32px 0 rgba(105, 106, 111, 0.37);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.18);
   top: -1px;
   right: -1px;

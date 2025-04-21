@@ -6,19 +6,21 @@ import {FaLocationArrow} from 'react-icons/fa6'
 
 const Hero = () => {
   return (
-    <div className='pb-20 pt-15'>
+    <div className='pb-15 pt-15'>
         <div>
             <Spotlight className='-top-40 -left-10 md:-left-32 md:-top-20 h-screen' fill='white'/>
             <Spotlight className='top-10 left-full h-[80vh] w-[50vw]' fill='purple'/>
             <Spotlight className='top-28 left-80 h-[80vh] w-[50vw]' fill='blue'/>
         </div>
 
-        <div className='flex justify-center relative my-20  pb-15'>
+        <div className='flex justify-center relative my-20 z-10 pb-15'>
+
+
             <div className='max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center'>
-                <h2 className='badge font-bold uppercase  tracking-widest text-xs  '>
+                <p className='badge font-bold uppercase  tracking-widest text-xs  '>
                  Skill Set Gets You There, Faster.
                  <span></span>
-                </h2>
+                </p>
                 <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Real conversations. Real-time coaching.
                     The kind of prep that actually gets you hired.' />
 
