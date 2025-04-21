@@ -351,12 +351,6 @@ export const dummyInterviews: Interview[] = [
       nameImg: "/appName.svg",
     },
     {
-      id: 3,
-      name: "HOSTINGER",
-      img: "/host.svg",
-      nameImg: "/hostName.svg",
-    },
-    {
       id: 4,
       name: "stream",
       img: "/s.svg",

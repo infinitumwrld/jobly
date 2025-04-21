@@ -11,7 +11,7 @@ const monaSans = Mona_Sans({
 
 export const metadata: Metadata = {
   title: "SkillSet",
-  description: "An AI-powered platform for preparing for mock interviews",
+  description: "Get job-ready fast with AI-driven realistic interviews and real-time coaching for Tech and Computer Science jobs.",
   icons: {
     icon: '/favi.png'
   }
