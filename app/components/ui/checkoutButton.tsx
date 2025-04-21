@@ -31,7 +31,7 @@ const CheckoutButton = ({ plan }: { plan: string }) => {
         {
           price: selectedPlan?.priceId,
           success_url: window.location.origin + '/dashboard',
-          cancel_url: window.location.origin + '/dashboard',
+          cancel_url: window.location.origin + '/',
         })
 
         const unsubscribe = onSnapshot(docRef, (snap) => {

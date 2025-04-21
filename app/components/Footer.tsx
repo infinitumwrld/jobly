@@ -28,10 +28,10 @@ const Footer = () => {
             </a>
         </div>
 
+           
+
         <div className='flex mt-16 md:flex-row flex-col justify-between items-center'>
-            <p className='md:text-base text-sm md:font-normal font-light'>
-                © Copyright 2025 Skill-Set
-            </p>
+           
             <div className='flex items-center md:gap-3 gap-6 p-5'>
                 {socialMedia.map((profile) => (
                     <div key={profile.id} className='w-10 h-10 cursor-pointer flex justify-center items-center backdrop-filter backdrop-blur-lg saturate-180 bg-opacity-75 bg-black-200 rounded-lg border border-black-300'> 
@@ -40,6 +40,25 @@ const Footer = () => {
                         </a>
                     </div>
                 ))}
+            </div>
+            <p className='md:text-base text-sm md:font-normal font-light'>
+                © 2025 Skill-Set. All rights reserved.
+            </p>
+
+        </div>
+
+          {/* Footer links */}
+          <div className='flex justify-center mt-12 mb-8 z-10 relative'>
+            <div className='flex space-x-6'>
+                <a href='/terms' className='text-gray-400 hover:text-purple-400 cursor-pointer'>
+                    Terms of Service
+                </a>
+                <a href='/privacy' className='text-gray-400 hover:text-purple-400 cursor-pointer'>
+                    Privacy Policy
+                </a>
+                <a href='/sing-in' className='text-gray-400 hover:text-purple-400 cursor-pointer'>
+                    Log In
+                </a>
             </div>
         </div>
     </footer>

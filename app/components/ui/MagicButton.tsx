@@ -1,5 +1,5 @@
 import React from 'react'
-
+ 
 const MagicButton = ({
     title, icon, position, handleClick, otherClasses
 }: {

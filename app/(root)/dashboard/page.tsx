@@ -23,10 +23,10 @@ const page = async () => {
       <section className='card-cta'>
           <div className='flex flex-col gap-6 max-w-lg'>
             <h2>
-              Land the Job: AI-Powered Mock Interviews with Instant, Expert-Level Feedback
+            Finally — Interview Practice That Actually Works.
             </h2>
             <p className='text-og'>
-              Sharpen Your Interview Skills with Real Questions and Instant Feedback
+            Get confident, get better, and walk into interviews like you’ve already got the offer.
             </p>
 
             <Button asChild className='btn-primary max-sm:w-full'>
