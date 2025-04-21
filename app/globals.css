@@ -667,7 +667,7 @@
   position: relative;
   text-decoration: none;
   padding: 8px 16px;
-
+  color: white;
   font-weight: 500;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.25);
@@ -703,7 +703,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(209, 209, 209, 0.7),
+    rgba(255, 255, 255, 0.7),
     transparent
   );
 }
@@ -715,7 +715,7 @@
   background: linear-gradient(
     to left,
     transparent,
-    rgba(209, 209, 209, 0.7),
+    rgba(255, 255, 255, 0.7),
     transparent
   );
 }
@@ -767,7 +767,7 @@
 }
 
 .inspired:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(184, 182, 182, 0.8);
 }
 
 .buttonlg {

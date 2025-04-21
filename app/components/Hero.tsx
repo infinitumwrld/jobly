@@ -15,7 +15,7 @@ const Hero = () => {
 
         <div className='flex justify-center relative my-20  pb-15'>
             <div className='max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center'>
-                <h2 className='badge uppercase tracking-widest text-xs  max-w-80'>
+                <h2 className='badge uppercase tracking-widest text-xs  '>
                  Skill Set Gets You There, Faster.
                  <span></span>
                 </h2>
