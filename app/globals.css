@@ -703,7 +703,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(255, 255, 255, 0.7),
+    rgba(209, 209, 209, 0.7),
     transparent
   );
 }
@@ -715,7 +715,7 @@
   background: linear-gradient(
     to left,
     transparent,
-    rgba(255, 255, 255, 0.7),
+    rgba(209, 209, 209, 0.7),
     transparent
   );
 }
