@@ -14,7 +14,9 @@ const page = () => {
         <div className="pt-10 max-w-3xl mx-auto flex flex-col ">
             <h2 className='text-2xl font-semibold text-white'> 1. Information We Collect </h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
             We collect both personal and non-personal information when you use the Skill Set platform. This includes:
+            </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> Personal Information: We may collect personal information such as your name, email address, and payment details during registration or subscription processes. </li>
 
@@ -26,7 +28,9 @@ const page = () => {
 
             <h2 className='text-2xl font-semibold text-white'> 2. How We Use Your Information </h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
             The information we collect is used for the following purposes:
+            </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> Account Management: To create and manage your account, verify your identity, and provide personalized services.</li>
 
@@ -65,10 +69,8 @@ const page = () => {
 
             <h2 className='text-2xl font-semibold text-white'>8. Your Rights</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
-            8. Your Rights
-
-You have the right to access, update, or delete your personal information at any time. If you wish to request access to your data, correct inaccuracies, or delete your account, please contact us.
-You also have the right to object to the processing of your personal data or to withdraw your consent where applicable.
+              You have the right to access, update, or delete your personal information at any time. If you wish to request access to your data, correct inaccuracies, or delete your account, please contact us.
+              You also have the right to object to the processing of your personal data or to withdraw your consent where applicable.
             </p>
 
             <h2 className='text-2xl font-semibold text-white'>9. Children's Privacy</h2>

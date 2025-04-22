@@ -18,14 +18,13 @@ const Hero = () => {
 
             <div className='max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center'>
                 <p className='badge font-bold uppercase  tracking-widest text-xs  '>
-                 Skill Set Gets You There, Faster.
+                Skill Set gets you hired. Fast.
                  <span></span>
                 </p>
-                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Real conversations. Real-time coaching.
-                    The kind of prep that actually gets you hired.' />
+                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Interview like a top 1% candidate. AI coaching built for elite tech roles.' />
 
                 <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
-                  Trusted by 10,000+ job seekers preparing for roles at Google, Meta, and more.
+                Trusted by 10,000+ job seekers preparing for Google, Meta, and the world’s most competitive companies.
                 </p> 
                 <a href='#about'>
                     <MagicButton 

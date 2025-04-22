@@ -23,7 +23,7 @@ const Footer = () => {
             We give you the real feedback you need to win. No excuses, no time wasted. The job you want is waiting. Are you ready to take it?
             </p>
 
-            <a href=''>
+            <a href='#pricing'>
                 <MagicButton title='Try SkillSet Now' icon={<FaLocationArrow/>} position='right'  />
             </a>
         </div>

@@ -22,7 +22,9 @@ const page = () => {
             </p>
             <h2 className='text-2xl font-semibold text-white'> 3. Account Registration and Security </h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
-            To use certain features of the Service, you may need to create an account. You agree to: 
+            <p className="mt-4 text-lg text-white-200 pb-10">
+              To use certain features of the Service, you may need to create an account. You agree to: 
+              </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> Provide accurate, current, and complete information during the registration process.</li>
 
@@ -30,12 +32,16 @@ const page = () => {
 
               <li className='text-lg font-semibold mb-5'>  Notify us immediately if you suspect any unauthorized access to your account.</li>
             </ul>
+            <p className="mt-4 text-lg text-white-200 pb-10">
             You are responsible for all activities under your account, and we are not responsible for any loss or damage resulting from unauthorized use of your account.
+           </p>
             </div>
 
             <h2 className='text-2xl font-semibold text-white'> 4. Subscription Plans and Payment </h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
                 Skill Set offers various subscription plans for different services, including free trials and paid subscriptions. By subscribing to a paid plan, you agree to the following: 
+            </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> You authorize us to charge your provided payment method on a recurring basis, depending on the selected subscription.</li>
 
@@ -43,12 +49,16 @@ const page = () => {
 
               <li className='text-lg font-semibold mb-5'>  You can cancel your subscription at any time through your account settings, but cancellations will take effect at the end of the current billing cycle.</li>
             </ul>
+            <p className="mt-4 text-lg text-white-200 pb-10">
             We reserve the right to change subscription prices at any time, with notice provided in accordance with these Terms.
+            </p>
             </div>
 
             <h2 className='text-2xl font-semibold text-white'> 5. Free Trials </h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
             We may offer a free trial period for certain subscription plans. Free trials are subject to the following conditions:
+            </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> After the free trial ends, you will automatically be charged unless you cancel the trial before the trial period expires.</li>
 
@@ -58,7 +68,9 @@ const page = () => {
 
             <h2 className='text-2xl font-semibold text-white'>6. Use of the Service</h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
             Skill Set is an AI-powered interview preparation platform designed to assist users in practicing job interviews. You agree to use the Service only for lawful purposes and in accordance with these Terms. You are prohibited from:
+           </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'> Using the Service to engage in illegal activities, including fraud, hacking, or harassment.</li>
 
@@ -104,7 +116,9 @@ You can also terminate your account by contacting us directly, and you will lose
 
             <h2 className='text-2xl font-semibold text-white'>13. Indemnification</h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
+            <p className="mt-4 text-lg text-white-200 pb-10">
             You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney’s fees, arising out of or related to:
+            </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'>Your use of the Service</li>
 
