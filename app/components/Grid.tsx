@@ -9,7 +9,7 @@ const Grid = () => {
 
 <h1 className='heading'>
             5 Reasons Skill Set  {' '}
-            <span className='text-purple-300'>Will Get You Hired</span>
+            <span className='text-purple-300'>Will Get You Hired  </span>
         </h1>
         <BentoGrid className='w-full py-15'>
             {gridItems.map(({ id, title, description, className, img, imgClassName, titleClassName, spareImg }) => (

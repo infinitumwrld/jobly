@@ -26,7 +26,7 @@ function Accordion() {
         <div className='pb-30'>
         <h1 className='heading p-10 pb-20'>
         What Most Students Ask Us {' '} <br/>
-            <span className='text-purple-300 '>(Before They Start Leveling Up)</span>
+            <span className='text-purple-300 '>(Before They Stop F*cking Up Interviews)</span>
         </h1>
             <div className='accordion '>
                 <section className='accordion-heading'>

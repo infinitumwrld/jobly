@@ -307,31 +307,31 @@ export const dummyInterviews: Interview[] = [
   export const testimonials = [
     {
       quote:
-        "I was always nervous about interviews and struggled with how to answer questions on the spot. Skill Set's real-time feedback helped me build confidence and gave me the tools I needed to stay calm and focused. I felt prepared for my interview at Google, and it paid off—I'm in!",
+        "I used to freeze up during interviews and had no clue how to answer on the spot. Skill Set’s real-time feedback helped me stay calm, confident, and actually know what to say. After using it, I nailed my Google interview—and now I’m in!",
       name: "James T.",
       title: "Google Software Engineer",
     },
     {
       quote:
-        "I've tried other mock interview platforms, but they were so robotic and unhelpful. Skill Set actually feels like a real conversation. The feedback I got was specific and actionable. It was the game-changer I needed to land my internship at Meta.",
+        "I tried other mock interview platforms, but they were just robotic. Skill Set felt like a real conversation. The feedback was specific and actually helped. It’s the reason I landed my internship at Meta.",
       name: "Sophia R.",
       title: "Meta intern",
     },
     {
       quote:
-        "I used to freeze during interviews and forget my answers. With Skill Set’s real-time feedback, I learned how to stay on track, improve my responses, and stay confident. It felt like I was practicing with a real interviewer who truly understood what I needed.",
+        "I used to freeze up in interviews and blank on everything. Skill Set’s real-time feedback actually helped me stay calm and nail my answers. It felt like practicing with someone who actually gets it.",
       name: "Alex K.",
       title: " Software Developer",
     },
     {
       quote:
-        "Interviewing felt like a guessing game. Skill Set’s AI gave me detailed insights into what I was doing wrong, from my tone to my answer structure. After a few sessions, I started getting more offers from companies like Netflix and Spotify.",
+        "Interviewing used to feel like a guessing game. Skill Set’s AI broke down exactly what I was messing up, from my tone to how I structured my answers. After just a few sessions, I started getting offers from companies like Netflix and Spotify.",
       name: "Olivia G.",
       title: "UX Designer",
     },
     {
       quote:
-        "I’d always get to the final round and then lose out. Skill Set pinpointed exactly where I was going wrong in my interviews and gave me real-time tips to fix it. The difference was night and day—now I’ve landed my first full-time role at Adobe!",
+        "I’d always get to the final round and then lose out. Skill Set pinpointed exactly where I was going wrong in my interviews and gave me real-time tips to fix it. The difference was huge and now I’ve landed my first full-time role at Adobe!",
       name: " Tom H.",
       title: "Adobe Developer",
     },
@@ -368,28 +368,28 @@ export const dummyInterviews: Interview[] = [
     {
       id: 1,
       title: "Built for Brain Freeze",
-      desc: "Most students know the answers… until the interview starts. We simulate real pressure so your brain gets used to staying calm, sharp, and focused when it matters most.",
+      desc: "You know the answers… until the interview hits. We simulate real pressure to help you stay calm, sharp, and locked in when it counts.",
       className: "md:col-span-2",
       thumbnail: "/exp1.svg",
     },
     {
       id: 2,
       title: "Feedback That Actually Makes You Better",
-      desc: "Generic mock interviews are too vague. Skill Set breaks down you why you struggled, how to fix it, and what to do next. Every session moves you forward.",
+      desc: "Generic mock interviews suck. We tell you exactly why you messed up, how to fix it, and what to do next. Every session makes you better.",
       className: "md:col-span-2", // change to md:col-span-2
       thumbnail: "/exp2.svg",
     },
     {
       id: 3,
       title: "Tailored to Tech, Not Just Talk",
-      desc: "This isn’t one-size-fits-all. You’ll train on real-world software engineering questions—designed to mirror what top companies actually ask.",
+      desc: "This isn’t some generic bullsh*t. You’ll train with real software engineering questions —exactly what the top companies actually ask.",
       className: "md:col-span-2", // change to md:col-span-2
       thumbnail: "/exp3.svg",
     },
     {
       id: 4,
       title: " On-Demand. No Awkward Calls",
-      desc: "Skip the scheduling and fake conversations. Skill Set gives you instant, realistic AI interviews—so you can practice when it matters, without wasting time.",
+      desc: "Forget scheduling and pointless convos with randoms. We give you instant, realistic AI interviews —practice when it matters, no wasted time.",
       className: "md:col-span-2",
       thumbnail: "/exp4.svg",
     },
@@ -409,7 +409,7 @@ export const dummyInterviews: Interview[] = [
     {
       id: 3,
       img: "/instagram-white-icon.png",
-      url: ''
+      url: 'https://www.instagram.com/tryskillset'
     },
   ];
 

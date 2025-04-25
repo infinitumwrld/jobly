@@ -19,9 +19,9 @@ const Prices = () => {
     <div id="pricing">
       <div className="container -pb-10">
         <div className="max-w-[960px] pricing-head_before relative mx-auto border-l border-r border-[#0A0A0A] bg-[#0A0A0A]/50 pb-40 pt-28 max-xl:max-w-4xl max-lg:border-none max-md:pb-32 max-md:pt-16">
-          <h3 className="heading mb-15">
+          <p className="heading mb-15">
            Your Path to Success Starts Here
-          </h3>
+          </p>
 
           <div className="relative z-4 mx-auto flex w-[375px] rounded-3xl border-[3px] border-[#F4F5F4]/25 bg-[#120B2A]/50 p-2 -mb-10 backdrop-blur-[6px] max-md:w-[310px]">
             <button

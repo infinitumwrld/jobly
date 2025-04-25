@@ -21,18 +21,18 @@ const Hero = () => {
                 Skill Set gets you hired. Fast.
                  <span></span>
                 </p>
-                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Interview like a top 1% candidate. AI coaching built for elite tech roles.' />
+                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
 
                 <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
-                Trusted by 10,000+ job seekers preparing for Google, Meta, and the world’s most competitive companies.
+                Join 10,000+ job seekers who are already using Skill Set to crush interviews at Google, Meta, and the world’s toughest companies.
                 </p> 
-                <a href='#about'>
+                
                     <MagicButton 
                         title="Start now"
                         icon={<FaLocationArrow />}
                         position='right'
                     />
-                </a>
+                
             </div>
         </div>
     </div>
