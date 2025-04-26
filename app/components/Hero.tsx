@@ -26,7 +26,7 @@ const Hero = () => {
                 <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
                 Join 10,000+ job seekers who are already using Skill Set to crush interviews at Google, Meta, and the world’s toughest companies.
                 </p> 
-                
+                 
                     <MagicButton 
                         title="Start now"
                         icon={<FaLocationArrow />}
