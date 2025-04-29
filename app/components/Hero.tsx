@@ -24,7 +24,7 @@ const Hero = () => {
                 <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
 
                 <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
-                Join 10,000+ job seekers who are already using Skill Set to crush interviews at Google, Meta, and the world’s toughest companies.
+                Join 10,000+ others leveling up with Skill Set — and landing offers from Google, Meta, and the toughest companies out there.
                 </p> 
                  
                     <MagicButton 

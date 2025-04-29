@@ -407,7 +407,7 @@ export const dummyInterviews: Interview[] = [
     {
       id: 2,
       img: "/twit.svg",
-      url: ''
+      url: 'https://x.com/skillset_ai'
     },
     {
       id: 3,
