@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/generalaction';
+import { auth } from '@/firebase/client';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -33,7 +34,7 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
       const onMessage = (message: Message) => {
         if(message.type === 'transcript' && message.transcriptType === 'final') {
           const newMessage = { role: message.role, content: message.transcript } 
-
+ 
           setMessages((prev) => [...prev, newMessage]);
         }
       }
@@ -80,7 +81,7 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
   useEffect(() => {
     if(callStatus === CallStatus.FINISHED) {
       if(type === 'generate') {
-        router.push('/')
+        router.push('/dashboard')
       } else {
         handleGenerateFeedback(messages);
       }
@@ -89,6 +90,24 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
 
   const handleCall = async () => {
     setcallStatus(CallStatus.CONNECTING);
+
+    
+  // Grab a fresh token & its claims
+  const { claims } = await auth.currentUser!.getIdTokenResult(true);
+
+  // 🔍 Log to verify
+  console.log("🔥 stripeRole:", claims.stripeRole);
+
+  // Read the correct key
+  const role = claims.stripeRole as string | undefined;
+
+  // Match exactly the values in your logs
+  if (role !== "Pro" && role !== "Premium") {
+    alert("You need to be subscribed (Pro or Premium) to continue with your interview.");
+    window.location.href = "/#pricing";
+    return;
+  }
+
         if (type === 'generate') {
           await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
           variableValues: {

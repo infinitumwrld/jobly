@@ -18,10 +18,19 @@ export async function POST(request: Request) {
         The tech stack used in the job is: ${techstack}.
         The focus between behavioural and technical questions should lean towards: ${type}.
         The amount of questions required is: ${amount}.
-        Please return only the questions, without any additional text.
-        The questions are going to be read by a voice assistant so do not use "/" or "*" or any other special characters which might break the voice assistant.
-        Return the questions formatted like this:
-        ["Question 1", "Question 2", "Question 3"]
+
+        Important guidelines: 
+        - Each question must focus on ONE clear topic or skill only.
+        - Do not combine multiple questions into one (no multi-part or overloaded questions).
+        - Phrase questions in a professional, clear, and natural style — as a real top company interviewer would.
+        - Avoid overly casual or robotic phrasing.
+        - Behavioral questions should follow real-world formats (e.g., STAR method prompts).
+        - Technical questions should challenge core understanding without being confusing or overwhelming.
+        - If a topic is complex, split it into separate focused questions instead of stacking.
+        - Please return only the questions, without any additional text.
+        - The questions are going to be read by a voice assistant so do not use "/" or "*" or any other special characters which might break the voice assistant.
+        - Return the questions formatted like this:
+          ["Question 1", "Question 2", "Question 3"]
         
         Thank you! <3
     `,

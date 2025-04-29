@@ -315,7 +315,7 @@
     
     .btn-call .span {
       @apply h-[85%] w-[65%];
-      background: rgba(76, 175, 80, 0.5);
+      background: rgba(76, 175, 80, 0.5); 
     }
   
 
@@ -442,6 +442,9 @@
     @apply absolute bottom-full mb-1 hidden group-hover:flex px-2 py-1 text-xs text-white bg-gray-700 rounded-md shadow-md;
   }
 
+
+
+
   .card-interview {
     @apply dark-gradient rounded-2xl min-h-full flex flex-col p-6 relative overflow-hidden gap-10 justify-between;
 
@@ -449,6 +452,8 @@
       @apply text-sm font-semibold capitalize;
     }
   }
+
+
 }
 
 @utility dark-gradient {

@@ -26,10 +26,10 @@ const page = async () => {
             Finally — Interview Practice That Actually Works.
             </h2>
             <p className='text-og'>
-            Get confident, get better, and walk into interviews like you’ve already got the offer.
+            Interviews are so good, it feels like talking to a real hiring manager. 
             </p>
 
-            <Button asChild className='btn-primary max-sm:w-full'>
+            <Button asChild className='btn-primary max-sm:w-full premium-shake'>
               <Link href='/interview'> 
                 Start an Interview
               </Link>

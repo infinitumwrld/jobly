@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Button } from './ui/button';
 import DisplayTechicons from './DisplayTechicons';
 import { getFeedbackByInterviewId } from '@/lib/actions/generalaction';
-
+ 
 const InterviewCard = async ({ id, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
   const feedback = userId && id ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null 
   const normalizedType = /mix/gi.test(type) ? 'Mixed' : type;
@@ -28,16 +28,16 @@ const InterviewCard = async ({ id, userId, role, type, techstack, createdAt }: I
 
                 <div className='flex flex-row gap-5 mt-3'>
                     <div className='flex flex-row gap-2'>
-                        <Image src="/calendar.svg" alt='calendar' width={22} height={22} />
+                        <Image src="/calendar.png" alt='calendar' width={22} height={22} />
                         <p>
                             {formattedDate}
                         </p>
                     </div>
                         <div className='flex flex-row gap-2 items-center'>
-                            <Image src='/star.svg' alt='star' width={22} height={22} />
+                            <Image src='/star.png' alt='star' width={22} height={22} />
                             <p>{feedback?.totalScore || '---'}/100 </p>
                         </div>
-                    </div>
+                    </div> 
 
                     <p className='line-clamp-2 mt-5'>
                         {feedback?.finalAssessment || "You haven't taken the interview yet. Take it now to improve your skills."}

@@ -12,7 +12,7 @@ const page = async ({ params }: RouteParams) => {
   const user = await getCurrentUser()
 
   const interview = await getInterviewById(id);
-  if(!interview) redirect('/');
+  if(!interview) redirect('/dashboard');
 
   const feedback = await getFeedbackByInterviewId ({
     interviewId: id,
@@ -32,7 +32,7 @@ const page = async ({ params }: RouteParams) => {
       <div className="flex flex-row gap-5">
         {/* Overall Impression */}
         <div className="flex flex-row gap-2 items-center">
-          <Image src="/star.svg" width={22} height={22} alt="star" />
+          <Image src="/stariski.png" width={30} height={30} alt="star" />
           <p>
             Overall Impression:{" "}
             <span className="text-primary-200 font-bold">
@@ -40,11 +40,11 @@ const page = async ({ params }: RouteParams) => {
             </span>
             /100
           </p>
-        </div>
+        </div>  
 
         {/* Date */}
         <div className="flex flex-row gap-2">
-          <Image src="/calendar.svg" width={22} height={22} alt="calendar" />
+          <Image src="/calendy.png" width={30} height={30} alt="calendar"/>
           <p>
             {feedback?.createdAt
               ? dayjs(feedback.createdAt).format("MMM D, YYYY h:mm A")
@@ -72,7 +72,7 @@ const page = async ({ params }: RouteParams) => {
     </div>
 
     <div className="flex flex-col gap-3">
-      <h3>Strengths</h3>
+      <h3>Strengths:</h3>
       <ul>
         {feedback?.strengths?.map((strength, index) => (
           <li key={index}>{strength}</li>
@@ -81,7 +81,7 @@ const page = async ({ params }: RouteParams) => {
     </div>
 
     <div className="flex flex-col gap-3">
-      <h3>Areas for Improvement</h3>
+      <h3>Areas for Improvement:</h3>
       <ul>
         {feedback?.areasForImprovement?.map((area, index) => (
           <li key={index}>{area}</li>
