@@ -44,7 +44,7 @@ function Accordion() {
                             <div className={`accordion-answer ${activeIndex[index].isActive === true ? 'visible' : ''}`}>
                                 <div >
                                     {item.answer}
-                                </div>
+                                </div> 
                             </div>
                         </li>
                     ))} 

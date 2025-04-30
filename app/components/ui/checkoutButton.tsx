@@ -55,7 +55,7 @@ const CheckoutButton = ({ plan }: { plan: string }) => {
 
 
         <button onClick={() => createCheckoutSession()} className='buttonlg'>
-           Try {plan} 
+           Try {plan}
         </button>
     </div> 
   )

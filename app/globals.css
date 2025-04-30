@@ -633,7 +633,8 @@
 
 
   h2 {
-      font-weight: 550;
+      font-weight: 500;
+      font-size: 20px;
   }
 }
 
@@ -763,66 +764,90 @@
 }
 
 
-
-
 .buttonlg {
-  --black: #000000;
-  --ch-black: #141414;
-  --eer-black: #1b1b1b;
-  --night-rider: #2e2e2e;
-  --white: #ffffff;
-  --af-white: #F3F3F3;
-
-  border-radius: 8px;
   width: 140px;
   height: 40px;
+  padding: 0 15px;
+  border: none;
+  border-radius: 12px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0px 15px;
-  border: none;
-  color: white;
-  position: relative;
-  cursor: pointer;
   font-weight: 700;
-  transition-duration: .2s;
-  background-color: var(--ch-black);
+  color: #FFF;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.6),
+    0 4px 8px rgba(0,0,0,0.8);
+}
+
+/* metallic gradient border */
+.buttonlg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    110deg,
+    #3a3c3e 0%,
+    #888 50%,
+    #3a3c3e 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* light sheen overlay */
+.buttonlg::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at top left,
+    rgba(255,255,255,0.6),
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  opacity: 0.25;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
   z-index: 1;
 }
 
-.buttonlg:before, .buttonlg:after {
-  content: '';
-  position: absolute;
-  left: -2px;
-  top: -2px;
-  border-radius: 10px;
-  background: linear-gradient(30deg, 
-  var(--ch-black), var(--eer-black),
-  var(--night-rider), rgba(255, 255, 255, 0.15), var(--night-rider), 
-	var(--eer-black), var(--ch-black),var(--ch-black));
-  background-size: 400%;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  z-index: -1;
-  animation: steam 25s linear infinite;
+/* ensure text/content sits above pseudos */
+.buttonlg > * {
+  position: relative;
+  z-index: 2;
 }
 
-@keyframes steam {
-  0% {
-    background-position: 0 0;
-  }
-
-  50% {
-    background-position: 400% 0;
-  }
-
-  100% {
-    background-position: 0 0;
-  }
+/* hover and active states */
+.buttonlg:hover {
+  transform: translateZ(8px);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,0.1),
+    0 8px 16px rgba(0,0,0,0.6);
 }
-
-.buttonlg:after {
-  filter: blur(50px);
+.buttonlg:hover::after {
+  opacity: 0.5;
 }
-
+.buttonlg:active {
+  transform: translateZ(2px);
+  box-shadow:
+    inset 0 2px 4px rgba(0,0,0,0.7),
+    0 2px 4px rgba(0,0,0,0.8);
+}

@@ -473,15 +473,15 @@ export const dummyInterviews: Interview[] = [
     },
     {
         question: ' Is Skill Set suitable for all students?',
-        answer: 'For sure! If you’re a tech or computer science student looking to land an internship or start your career after graduation, Skill Set is built for you. We focus on preparing you for the exact types of interviews you’ll face, so you’re ready for anything.'
+        answer: 'YES. If you’re a tech or computer science student looking to land an internship or start your career after graduation, Skill Set is built for you. We focus on preparing you for the exact types of interviews you’ll face, so you’re ready for anything.'
     },
     {
         question: 'What kind of feedback will I get?',
-        answer: 'After your interview, you’ll get feedback that’s actually useful. We’re talking about detailed insights on your answers, how you communicated, and where you can improve. It’s not just generic feedback – it’s tailored to help you get better, fast.'
+        answer: 'After your interview, you’ll get feedback that’s actually useful. We’re talking about detailed insights on your answers, how you communicated, and where you can improve. It’s not just generic feedback – it’s tailored to help you get better, fast. And give you feedback based on what the top companies actually look for.'
     },
     {
         question: 'How do I get started?',
-        answer: 'Getting started is super easy. Just sign up for our $3 trial, take an interview, and see for yourself how we can help. No complicated sign-up process, no hidden fees – just straight to the good stuff.'
+        answer: 'Easy. Just sign up for our $3 trial, take an interview, and see for yourself how we can help. No complicated sign-up process, no hidden fees – just straight to the good stuff.'
     },
   
 

@@ -20,8 +20,8 @@ const Footer = () => {
             Skill Set is built for <span className='text-purple-300'>one thing — </span> getting you hired. 
             </h1>
             <p className='text-white-200 md:mt-10 my-5 text-center pb-7'>
-            We give you the real feedback you need to win. No excuses, no time wasted. The job you want is waiting. Are you ready to take it?
-            </p>
+            Everyone’s selling shortcuts. We give you the edge that actually works.
+                        </p>
 
             <a href='#pricing'>
                 <MagicButton title='Try SkillSet Now' icon={<FaLocationArrow/>} position='right'  />
