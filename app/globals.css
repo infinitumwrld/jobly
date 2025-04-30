@@ -658,7 +658,7 @@
   transition: grid-template-rows 0.5s;
 
 }
-.accordion-answer>div {
+.accordion-answer>div { 
   overflow: hidden;
 }
 
@@ -708,7 +708,7 @@
   background: linear-gradient(
     to bottom,
     transparent,
-    rgba(184, 184, 184, 0.7),
+    rgba(255, 255, 255, 0.7),
     transparent
   );
 }
@@ -762,18 +762,8 @@
   border-radius: 999px;
 }
 
-.inspired {
-  position: absolute;
-  bottom: 8%;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 12px;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
 
-.inspired:hover {
-  color: rgba(184, 182, 182, 0.8);
-}
+
 
 .buttonlg {
   --black: #000000;

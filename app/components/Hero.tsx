@@ -6,26 +6,25 @@ import {FaLocationArrow} from 'react-icons/fa6'
 
 const Hero = () => {
   return (
-    <div className='pb-15 pt-15'>
+    <div className='pb-15 pt-20'>
         <div>
             <Spotlight className='-top-40 -left-10 md:-left-32 md:-top-20 h-screen' fill='white'/>
             <Spotlight className='top-10 left-full h-[80vh] w-[50vw]' fill='purple'/>
-            <Spotlight className='top-28 left-80 h-[80vh] w-[50vw]' fill='blue'/>
+            <Spotlight className='top-28 left-80 h-[80vh] w-[50vw]' fill='white'/>
         </div>
-
+ 
         <div className='flex justify-center relative my-20 z-10 pb-15'>
 
 
             <div className='max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center'>
                 <p className='badge font-bold uppercase  tracking-widest text-xs  '>
-                Skill Set gets you hired. Fast.
+                F*ck cheat tools. Get hired for real.
                  <span></span>
                 </p>
-                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
 
-                <p className='text-center md:tracking-wider mb-10 text-m  md:text-lg lg:text-2xl'>
-                Join 10,000+ others leveling up with Skill Set — and landing offers from Google, Meta, and the toughest companies out there.
-                </p> 
+                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl mb-10' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
+
+                
                  
                     <MagicButton 
                         title="Start now"

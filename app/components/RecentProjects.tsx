@@ -44,7 +44,6 @@ const RecentProjects = () => {
                         title="Start Trial Now"
                         icon={<FaLocationArrow />}
                         position='right'
-                        otherClasses='text-lg py-6 pb-5'
                     />
            </div> 
     </div>
