@@ -25,7 +25,7 @@ const Hero = () => {
                 <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl mb-5' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
 
                 <p className='text-center md:tracking-wider text-sm md:text-lg lg:text-2xl lg:mb-5'>
-                    SkillSet simulates realistic interviews from top tech companies
+                    SkillSet simulates realistic interviews from FAANG-level companies.
                 </p> 
                  
                     <MagicButton 
