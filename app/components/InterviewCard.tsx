@@ -28,13 +28,13 @@ const InterviewCard = async ({ id, userId, role, type, techstack, createdAt }: I
 
                 <div className='flex flex-row gap-5 mt-3'>
                     <div className='flex flex-row gap-2'>
-                        <Image src="/calendar.png" alt='calendar' width={22} height={22} />
+                        <Image src="/calendy.png" alt='calendar' width={22} height={22} />
                         <p>
                             {formattedDate}
                         </p>
                     </div>
                         <div className='flex flex-row gap-2 items-center'>
-                            <Image src='/star.png' alt='star' width={22} height={22} />
+                            <Image src='/stariski.png' alt='star' width={22} height={22} />
                             <p>{feedback?.totalScore || '---'}/100 </p>
                         </div>
                     </div> 
