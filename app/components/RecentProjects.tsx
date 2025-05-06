@@ -37,7 +37,7 @@ const RecentProjects = () => {
            ))} 
         </div>
           <p className='heading pt-20'>
-            Ready to Stop F*cking Up Interviews? <span className='text-purple-300'> Give us a try </span> 
+            Ready to Stop F*cking Up Interviews? <span className='text-purple-300'> Give us a try for only $3 </span> 
           </p>
         <div className='max-w-[50vw] md:max-w-2xl lg:max-w-[60vw] flex flex-center justify-center items-center m-10'>
                     <MagicButton 

@@ -37,11 +37,13 @@ const MagicButton = ({
         const docRef = await addDoc(
           collection(db, 'users', user.id, 'checkout_sessions'),
           {
-            price: 'price_1RD8nBEbkgNqj4nWZFTU8syW',     
+            price: 'price_1RHDefEbkgNqj4nWs6pfrx9X',
+            mode: 'payment',     
             success_url: window.location.origin + '/dashboard',
             cancel_url: window.location.origin + '/',
+            metadata: { dayPass: true }, 
           }
-        )
+        ) 
       
       onSnapshot(docRef, (snap) => {
         const { error, url } = snap.data() ?? {}

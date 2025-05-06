@@ -8,6 +8,11 @@ import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/generalaction';
 import { auth } from '@/firebase/client';
+import { db } from '@/firebase/client';
+import {
+  collection, query, where, orderBy, limit, getDocs, Timestamp,
+} from 'firebase/firestore';
+import { getCurrentUser, isAuthenticated } from '@/lib/actions/authaction';
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -96,13 +101,30 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
   const { claims } = await auth.currentUser!.getIdTokenResult(true);
 
   // 🔍 Log to verify
-  console.log("🔥 stripeRole:", claims.stripeRole);
+  console.log("🔥 stripeRole:", claims.stripeRole)
 
   // Read the correct key
-  const role = claims.stripeRole as string | undefined;
+  const role = claims.stripeRole as string | undefined; 
+ 
+  let trialActive = false;
+
+if (role !== 'Pro' && role !== 'Premium') {
+  const since = Date.now() - 24 * 60 * 60 * 1000;    
+  const uid   = auth.currentUser!.uid;  
+  const paymentsRef = collection(db, 'users', uid, 'payments');
+  const q = query(
+    paymentsRef,
+    where('price', '==', 'price_1RHDefEbkgNqj4nWs6pfrx9X'),
+    where('status', '==', 'succeeded'),
+    where('created', '>=', Timestamp.fromMillis(since)),
+    orderBy('created', 'desc'),
+    limit(1),
+  );
+  trialActive = !(await getDocs(q)).empty;
+}
 
   // Match exactly the values in your logs
-  if (role !== "Pro" && role !== "Premium") {
+  if (role !== "Pro" && role !== "Premium" && !trialActive ) {
     alert("You need to be subscribed (Pro or Premium) to continue with your interview.");
     window.location.href = "/#pricing";
     return;
