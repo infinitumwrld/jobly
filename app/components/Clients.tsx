@@ -21,25 +21,7 @@ const Clients = () => {
             direction='right'
             speed='normal'
             />
-         <p className='text-center md:tracking-wider text-sm md:text-lg lg:text-2xl mt-2 lg:mb-10'>
-         We've gained credibility from the most competitive companies like:
-         </p> 
-            <div className='flex flex-wrap items-center justify-center gap-4 md:gap-16 max-lg:mt-10'>
-           
-               {companies.map(({ id, img, name, nameImg}) => (
-                <div key={id} className='flex md:max-60 max-w-30 gap-2 '>
-                     <Image
-                        src={img}
-                        alt={name}
-                        height={100}
-                        width={100}
-                        className="object-contain"
-                        priority
-                    />
-                    
-                </div>
-               ))} 
-            </div>
+ 
         </div>
     </div>
   )

@@ -3,6 +3,8 @@ import { Spotlight } from './ui/spotlight'
 import { TextGenerateEffect } from './ui/TextGenerateEffect'
 import MagicButton from './ui/MagicButton'
 import {FaLocationArrow} from 'react-icons/fa6'
+import { companies, testimonials } from '@/constants'
+import Image from 'next/image'
 
 const Hero = () => {
   return (
@@ -34,6 +36,42 @@ const Hero = () => {
                         position='right'
                     />
                 
+                <div className='    w-full max-w-2xl
+                    mt-15
+                    rounded-xl      
+                    overflow-hidden
+                    bg-gray-800
+                    shadow-[0_0_10px_rgba(255,255,255,0.2)]
+                    hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]
+                    transition-shadow duration-300 ease-out'>
+
+                    <video
+                        className="w-full rounded-lg shadow-lg"
+                        src="/skillsett.mp4"    // ← put your local path here
+                        controls
+                        playsInline
+                    />
+
+                </div>
+                 <p className='text-center md:tracking-wider text-sm md:text-lg lg:text-2xl mt-15 lg:mb-10'>
+                         We've gained credibility from the most competitive companies like:
+                         </p> 
+                            <div className='flex flex-wrap items-center justify-center gap-4 md:gap-16 max-lg:mt-10'>
+                           
+                               {companies.map(({ id, img, name, nameImg}) => (
+                                <div key={id} className='flex md:max-60 max-w-30 gap-2 '>
+                                     <Image
+                                        src={img}
+                                        alt={name}
+                                        height={100}
+                                        width={100}
+                                        className="object-contain"
+                                        priority
+                                    />
+                                    
+                                </div>
+                               ))} 
+                            </div>
             </div>
         </div>
     </div>
