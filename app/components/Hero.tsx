@@ -36,23 +36,19 @@ const Hero = () => {
                         position='right'
                     />
                 
-                <div className='    w-full max-w-2xl
-                    mt-15
-                    rounded-xl      
-                    overflow-hidden
-                    bg-gray-800
-                    shadow-[0_0_10px_rgba(255,255,255,0.2)]
-                    hover:shadow-[0_0_15px_rgba(255,255,255,0.4)]
-                    transition-shadow duration-300 ease-out'>
-
-                    <video
-                        className="w-full rounded-lg shadow-lg"
-                        src="/skillsett.mp4"    // ← put your local path here
-                        controls
-                        playsInline
-                    />
-
+                <div className='w-full max-w-2xl mt-16 rounded-xl overflow-hidden bg-gray-800 shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_15px_rgba(255,255,255,0.4)] transition-shadow duration-300 ease-out'>
+                    <div className="relative w-full aspect-video">
+                        <iframe 
+                        className="absolute inset-0 w-full h-full"
+                        src="https://www.youtube-nocookie.com/embed/uL0s2SN_0ME?rel=0" 
+                        title="How SkillSet Works:"
+                        allow="clipboard-write; encrypted-media; picture-in-picture"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen>
+                        </iframe>
+                    </div>
                 </div>
+
                  <p className='text-center md:tracking-wider text-sm md:text-lg lg:text-2xl mt-15 lg:mb-10'>
                          We've gained credibility from the most competitive companies like:
                          </p> 

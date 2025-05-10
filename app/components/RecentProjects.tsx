@@ -8,7 +8,7 @@ import { FaLocationArrow } from 'react-icons/fa6';
 
 const RecentProjects = () => {
   return (
-    <div className='pt-20 ' id='approach'>
+    <div className='pt-15 ' id='approach'>
         <h1 className='heading'>
         💡 Why Skill Set Works {' '} <br/>
             <span className='text-purple-300 '>When Everything Else Doesn’t</span>
