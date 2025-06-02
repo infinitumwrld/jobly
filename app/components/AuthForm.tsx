@@ -11,9 +11,11 @@ import Link from "next/link";
 import { toast, Toaster } from "sonner";
 import FormField from "./FormField";
 import { useRouter } from "next/navigation";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { signIn, signUp } from "@/lib/actions/authaction";
+import { useCallback, useState } from "react";
+import { debounce } from "@/lib/utils";
 
 const authFormSchema = (type : FormType) => {
   return z.object({
@@ -24,11 +26,10 @@ const authFormSchema = (type : FormType) => {
 }
 
 const AuthForm = ({ type }: { type: FormType }) => {
-  
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formSchema = authFormSchema(type);
 
-    // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,9 +39,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
     },
   })
  
-  // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try{
+  // Debounced submit handler with proper loading state
+  const debouncedSubmit = useCallback(
+    debounce(async (values: z.infer<typeof formSchema>) => {
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+
+      try {
         if(type === 'sign-up') {
           const {name, email, password} = values
           
@@ -61,7 +66,6 @@ const AuthForm = ({ type }: { type: FormType }) => {
           toast.success('Account created successfully. Please sign in.'); 
           router.push('/sing-in')
         } else {
-
           const {email, password} = values;
           const userCredential = await signInWithEmailAndPassword(auth, email, password);
           const idToken = await userCredential.user.getIdToken();
@@ -78,58 +82,142 @@ const AuthForm = ({ type }: { type: FormType }) => {
           toast.success('Sign in successfully.'); 
           router.push('/dashboard')
         }
-    } catch (error) {
+      } catch (error) {
         console.log(error);
         toast.error(`There was an error: ${error}`)
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 1000), // Longer delay for auth operations
+    [type, router, isSubmitting]
+  );
+
+  // Form submission wrapper
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    debouncedSubmit(values);
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+
+      if (!idToken) {
+        toast.error('Google sign in failed');
+        return;
+      }
+
+      // If it's sign up, we need to create the user in our database
+      if (type === 'sign-up') {
+        const result = await signUp({
+          uid: userCredential.user.uid,
+          name: userCredential.user.displayName || 'Google User',
+          email: userCredential.user.email!,
+          password: '' // Google users don't need password
+        });
+
+        if (!result?.success) {
+          toast.error(result?.message);
+          return;
+        }
+      }
+
+      // Sign in the user
+      await signIn({
+        email: userCredential.user.email!,
+        idToken
+      });
+
+      toast.success('Signed in successfully with Google');
+      router.push('/dashboard');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to sign in with Google');
     }
-  }
+  };
 
   const isSignIn = type === 'sign-in';
 
   return (
-    <div className="card-border lg:min-w-[566px]">
-        <div className="flex flex-col gap-6 card py-14 px-10">
-                <div className="flex flex-row gap-2 justify-center">
-                    <Image src="/logo.png" alt="logo" height={200} width={200} />
-
-                </div>
-                <h3 className="text-center mx-auto">Get interview-ready with the smartest AI <br/> built for landing tech jobs</h3>
-            
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6 mt-4 form">
-                    {!isSignIn && (
-                      <FormField 
-                        control={form.control}
-                        name='name'
-                        label= 'Name'
-                        placeholder='Your Name'
-                      />  
-                    )}
-                    <FormField 
-                        control={form.control}
-                        name='email'
-                        label= 'Email'
-                        placeholder='Your email address'
-                        type='email'
-                      />  
-                    <FormField 
-                        control={form.control}
-                        name='password'
-                        label= 'Password'
-                        placeholder='Enter your Password'
-                        type='password'
-                      />  
-                    <Button className="btn" type="submit">{isSignIn ? "Sign in" : "Create an Account"}</Button>
-                </form>
-            </Form>
-
-            <p className="text-center">
-                {isSignIn ? 'No account yet? ' : 'Have an account already? '}
-                <Link href={!isSignIn ? '/sing-in' : '/sing-up'} className="font-bold text-user-primary ml-1"> 
-                    {!isSignIn ? "Sign In" : "Sign Up"}                
-                </Link>
-            </p>        
+    <div className="relative rounded-2xl border border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl p-8 max-w-md w-full mx-auto">
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col items-center gap-2">
+          <Image src="/logo.png" alt="logo" width={150} height={150} className="mb-2" />
+          <h2 className="text-xl font-medium text-center">
+            Get interview-ready with the smartest AI<br />
+            built for landing tech jobs
+          </h2>
         </div>
+
+        {/* Google Sign In Button */}
+        <button
+          type="button"
+          className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-50 text-gray-800 px-4 py-3 rounded-full font-medium transition-colors cursor-pointer"
+          onClick={handleGoogleSignIn}
+          disabled={isSubmitting}
+        >
+          <Image src="/google.svg" alt="Google" width={20} height={20} />
+          Continue with Google
+        </button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/10"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 text-[#666] bg-[#0A0A0A]/80 backdrop-blur-xl">OR CONTINUE WITH EMAIL</span>
+          </div>
+        </div>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {!isSignIn && (
+              <FormField 
+                control={form.control}
+                name="name"
+                label="Name"
+                placeholder="Your Name"
+              />  
+            )}
+            <FormField 
+              control={form.control}
+              name="email"
+              label="Email"
+              placeholder="Your email address"
+              type="email"
+            />  
+            <FormField 
+              control={form.control}
+              name="password"
+              label="Password"
+              placeholder="Enter your Password"
+              type="password"
+            />  
+            <Button 
+              className="w-full bg-[#8b5cf6] hover:bg-[#7c3aed] text-white py-3 rounded-full font-medium transition-colors cursor-pointer" 
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting 
+                ? "Processing..." 
+                : isSignIn 
+                  ? "Sign in" 
+                  : "Create an Account"}
+            </Button>
+          </form>
+        </Form>
+
+        <p className="text-center text-[#666]">
+          {isSignIn ? 'No account yet? ' : 'Have an account already? '}
+          <Link 
+            href={!isSignIn ? '/sing-in' : '/sing-up'} 
+            className="text-white hover:text-[#8b5cf6] transition-colors cursor-pointer"
+          > 
+            {!isSignIn ? "Sign In" : "Sign Up"}                
+          </Link>
+        </p>        
+      </div>
     </div>
   )
 }

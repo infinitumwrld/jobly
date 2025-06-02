@@ -3,12 +3,13 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/generalaction';
 import { auth } from '@/firebase/client';
 import { db } from '@/firebase/client';
+import { toast } from 'sonner';
 import {
   collection, query, where, orderBy, limit, getDocs, Timestamp,
 } from 'firebase/firestore';
@@ -19,152 +20,256 @@ enum CallStatus {
   CONNECTING = 'CONNECTING',
   ACTIVE = 'ACTIVE',
   FINISHED = 'FINISHED',
+  GENERATING_FEEDBACK = 'GENERATING_FEEDBACK',
 }
 
 interface SavedMessage {
   role: 'user' | 'system' | 'assistant'
   content: string;
-
 }
+
+const MIN_MESSAGES_FOR_FEEDBACK = 4; // Minimum number of messages to consider it a valid interview
+const MAX_FEEDBACK_RETRIES = 3;
+const RETRY_DELAY = 2000; // 2 seconds
+const TRIAL_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps) => {
   const router = useRouter();
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [callStatus, setcallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
-  const[messages, setMessages] = useState<SavedMessage[]>([]);
+  const [messages, setMessages] = useState<SavedMessage[]>([]);
+  const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
 
-  useEffect (() => {
-      const onCallStart = () => setcallStatus(CallStatus.ACTIVE);
-      const onCallEnd = () => setcallStatus(CallStatus.FINISHED);
-      const onMessage = (message: Message) => {
-        if(message.type === 'transcript' && message.transcriptType === 'final') {
-          const newMessage = { role: message.role, content: message.transcript } 
- 
-          setMessages((prev) => [...prev, newMessage]);
-        }
-      }
-
-      const onSpeechStart = () => setIsSpeaking(true);
-      const onSpeechEnd = () => setIsSpeaking(false);
-
-      const onError = (error: Error) => console.log('Error', error); 
-
-      vapi.on('call-start', onCallStart);
-      vapi.on('call-end', onCallEnd);
-      vapi.on('message', onMessage);
-      vapi.on('speech-start', onSpeechStart);
-      vapi.on('speech-end', onSpeechEnd);
-      vapi.on('error', onError);
-
-      return () => { 
-        vapi.off('call-start', onCallStart);
-        vapi.off('call-end', onCallEnd);
-        vapi.off('message', onMessage);
-        vapi.off('speech-start', onSpeechStart);
-        vapi.off('speech-end', onSpeechEnd);
-        vapi.off('error', onError);
-      }
-  }, [])
-
-  const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-    console.log('Generate feedback here')
-
-    const { success, feedbackId: id } = await createFeedback({
-      interviewId: interviewId!,
-      userId: userId!,
-      transcript: messages
-    })
-
-    if(success && id) {
-      router.push(`/interview/${interviewId}/feedback`)
-    } else {
-      console.log('Error saving feedback');
-      router.push('/dashboard');
+  const validateInterviewData = useCallback(() => {
+    if (!userId || !interviewId) {
+      console.error('Missing required data:', { userId, interviewId });
+      toast.error('Missing required interview data. Please try again.');
+      return false;
     }
-  }
+    if (!messages || messages.length < MIN_MESSAGES_FOR_FEEDBACK) {
+      console.error('Not enough messages for feedback:', messages?.length);
+      toast.error('Interview was too short. Please try again.');
+      return false;
+    }
+    return true;
+  }, [userId, interviewId, messages]);
+
+  const handleGenerateFeedback = useCallback(async (messages: SavedMessage[], retry = 0): Promise<boolean> => {
+    if (retry >= MAX_FEEDBACK_RETRIES) {
+      toast.error('Failed to generate feedback after multiple attempts. Please try again.');
+      setIsGeneratingFeedback(false);
+      return false;
+    }
+
+    if (!validateInterviewData()) {
+      setIsGeneratingFeedback(false);
+      return false;
+    }
+
+    try {
+      console.log('Generating feedback, attempt:', retry + 1);
+      setcallStatus(CallStatus.GENERATING_FEEDBACK);
+      setIsGeneratingFeedback(true);
+
+      const { success, feedbackId: id } = await createFeedback({
+        interviewId: interviewId!,
+        userId: userId!,
+        transcript: messages
+      });
+
+      if (success && id) {
+        toast.success('Feedback generated successfully!');
+        setIsGeneratingFeedback(false);
+        router.push(`/interview/${interviewId}/feedback`);
+        return true;
+      } 
+
+      // If not successful, retry after delay
+      console.log('Feedback generation not successful, retrying...');
+      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+      return handleGenerateFeedback(messages, retry + 1);
+
+    } catch (error) {
+      console.error('Error generating feedback:', error);
+      
+      // If it's a network error or temporary issue, retry
+      if (retry < MAX_FEEDBACK_RETRIES) {
+        console.log('Retrying after error...');
+        await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+        return handleGenerateFeedback(messages, retry + 1);
+      }
+
+      toast.error('Failed to generate feedback. Please try again.');
+      setIsGeneratingFeedback(false);
+      return false;
+    }
+  }, [interviewId, userId, router, validateInterviewData]);
 
   useEffect(() => {
-    if(callStatus === CallStatus.FINISHED) {
-      if(type === 'generate') {
-        router.push('/dashboard')
-      } else {
-        handleGenerateFeedback(messages);
+    const onCallStart = () => {
+      setcallStatus(CallStatus.ACTIVE);
+      setIsGeneratingFeedback(false); // Reset feedback state on new call
+    };
+    
+    const onCallEnd = () => {
+      setcallStatus(CallStatus.FINISHED);
+      console.log('Call ended with messages:', messages.length);
+    };
+
+    const onMessage = (message: Message) => {
+      if(message.type === 'transcript' && message.transcriptType === 'final') {
+        const newMessage = { role: message.role, content: message.transcript } 
+        console.log('New message:', newMessage);
+        setMessages((prev) => [...prev, newMessage]);
       }
     }
-  }, [messages, callStatus, type, userId])
+
+    const onSpeechStart = () => setIsSpeaking(true);
+    const onSpeechEnd = () => setIsSpeaking(false);
+
+    const onError = (error: Error) => {
+      console.error('Call error:', error);
+      toast.error('There was an error with the interview. Please try again.');
+      setIsGeneratingFeedback(false);
+    }
+
+    vapi.on('call-start', onCallStart);
+    vapi.on('call-end', onCallEnd);
+    vapi.on('message', onMessage);
+    vapi.on('speech-start', onSpeechStart);
+    vapi.on('speech-end', onSpeechEnd);
+    vapi.on('error', onError);
+
+    return () => { 
+      vapi.off('call-start', onCallStart);
+      vapi.off('call-end', onCallEnd);
+      vapi.off('message', onMessage);
+      vapi.off('speech-start', onSpeechStart);
+      vapi.off('speech-end', onSpeechEnd);
+      vapi.off('error', onError);
+    }
+  }, [messages.length])
+
+  useEffect(() => {
+    const generateFeedbackIfNeeded = async () => {
+      // Only generate feedback for actual interviews (not generation)
+      if (callStatus === CallStatus.FINISHED && type !== 'generate' && messages.length > 0) {
+        console.log('Attempting to generate feedback for interview:', interviewId);
+        const success = await handleGenerateFeedback(messages);
+        if (!success) {
+          console.log('Feedback generation failed, redirecting to dashboard');
+          setIsGeneratingFeedback(false);
+          router.push('/dashboard');
+        }
+      } else if (callStatus === CallStatus.FINISHED && type === 'generate') {
+        router.push('/dashboard');
+      }
+    };
+
+    generateFeedbackIfNeeded();
+  }, [callStatus, type, messages, handleGenerateFeedback, router, interviewId]);
+
+  const checkAccessStatus = useCallback(async () => {
+    try {
+      if (!auth.currentUser) {
+        toast.error("Please sign in to continue.");
+        router.push("/login");
+        return false;
+      }
+
+      // Get fresh token & claims
+      const { claims } = await auth.currentUser.getIdTokenResult(true);
+      const role = claims.stripeRole as string | undefined;
+
+      // If user has Pro or Premium subscription, they have access
+      if (role === 'Pro' || role === 'Premium') {
+        return true;
+      }
+
+      // Check for active trial
+      const since = Date.now() - TRIAL_DURATION;
+      const uid = auth.currentUser.uid;
+      const paymentsRef = collection(db, 'users', uid, 'payments');
+      const q = query(
+        paymentsRef,
+        where('price', '==', 'price_1RHDefEbkgNqj4nWs6pfrx9X'),
+        where('status', '==', 'succeeded'),
+        where('created', '>=', Timestamp.fromMillis(since)),
+        orderBy('created', 'desc'),
+        limit(1),
+      );
+
+      const querySnapshot = await getDocs(q);
+      const trialActive = !querySnapshot.empty;
+
+      if (!trialActive) {
+        toast.error("Your trial has expired. Please upgrade to continue.");
+        window.location.href = "/#pricing";
+        return false;
+      }
+
+      // Trial is active
+      return true;
+    } catch (error) {
+      console.error('Error checking access:', error);
+      toast.error("Error verifying access. Please try again.");
+      return false;
+    }
+  }, [router]);
 
   const handleCall = async () => {
-    setcallStatus(CallStatus.CONNECTING);
+    try {
+      setcallStatus(CallStatus.CONNECTING);
+      setMessages([]); // Clear any previous messages
+      setIsGeneratingFeedback(false);
 
-    
-  // Grab a fresh token & its claims
-  const { claims } = await auth.currentUser!.getIdTokenResult(true);
+      // Verify access before starting
+      const hasAccess = await checkAccessStatus();
+      if (!hasAccess) return;
 
-  // 🔍 Log to verify
-  console.log("🔥 stripeRole:", claims.stripeRole)
-
-  // Read the correct key
-  const role = claims.stripeRole as string | undefined; 
- 
-  let trialActive = false;
-
-if (role !== 'Pro' && role !== 'Premium') {
-  const since = Date.now() - 24 * 60 * 60 * 1000;    
-  const uid   = auth.currentUser!.uid;  
-  const paymentsRef = collection(db, 'users', uid, 'payments');
-  const q = query(
-    paymentsRef,
-    where('price', '==', 'price_1RHDefEbkgNqj4nWs6pfrx9X'),
-    where('status', '==', 'succeeded'),
-    where('created', '>=', Timestamp.fromMillis(since)),
-    orderBy('created', 'desc'),
-    limit(1),
-  );
-  trialActive = !(await getDocs(q)).empty;
-}
-
-  // Match exactly the values in your logs
-  if (role !== "Pro" && role !== "Premium" && !trialActive ) {
-    alert("You need to be subscribed (Pro or Premium) to continue with your interview.");
-    window.location.href = "/#pricing";
-    return;
-  }
-
-        if (type === 'generate') {
-          await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
+      if (type === 'generate') {
+        await vapi.start(process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!, {
           variableValues: {
             username: userName,
             userid: userId,
           }
-        })
+        });
       } else {
         let formattedQuestions = '';
-
         if (questions) {
           formattedQuestions = questions
             .map((question) => `= ${question}`)
-            .join('\n')
+            .join('\n');
         }
 
         await vapi.start(interviewer, {
           variableValues: {
-              questions: formattedQuestions
+            questions: formattedQuestions
           }
-        })
+        });
       }
+    } catch (error) {
+      console.error('Error starting call:', error);
+      toast.error('Failed to start the interview. Please try again.');
+      setcallStatus(CallStatus.INACTIVE);
+      setIsGeneratingFeedback(false);
     }
-
-    
+  }
 
   const handleDisconnect = async () => {
-    setcallStatus(CallStatus.FINISHED);
-
-    vapi.stop();
+    try {
+      console.log('Disconnecting call with messages:', messages.length);
+      setcallStatus(CallStatus.FINISHED);
+      await vapi.stop();
+    } catch (error) {
+      console.error('Error stopping call:', error);
+      // Still set status to finished even if stop fails
+      setcallStatus(CallStatus.FINISHED);
+    }
   }
 
   const latestMessage = messages[messages.length - 1]?.content;
-
-  const isCallInactiveOrFinished = callStatus == CallStatus.INACTIVE || callStatus == CallStatus.FINISHED;
+  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
 
   return (
     <>
@@ -196,23 +301,30 @@ if (role !== 'Pro' && role !== 'Premium') {
                 {latestMessage}
               </p>
             </div>
-
           </div>
         )}
 
         <div className='w-full flex justify-center'>
-          {callStatus !== 'ACTIVE' ? (
-            <button className='relative btn-call' onClick={handleCall}>
-              <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== 'CONNECTING' && 'hidden' )} />
-                <span>
-                {isCallInactiveOrFinished ? 'Start Call' : '...' } 
-                </span>
-            </button>
-          ) : (
+          {callStatus === CallStatus.ACTIVE ? (
             <button className='btn-disconnect' onClick={handleDisconnect}>
               End Call
             </button>
-          ) }
+          ) : isGeneratingFeedback ? (
+            <button className='btn-call' disabled>
+              Generating Feedback... Please wait
+            </button>
+          ) : (
+            <button 
+              className='relative btn-call' 
+              onClick={handleCall}
+              disabled={callStatus === CallStatus.CONNECTING}
+            >
+              <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== CallStatus.CONNECTING && 'hidden')} />
+              <span>
+                {isCallInactiveOrFinished ? 'Start Call' : 'Connecting...'} 
+              </span>
+            </button>
+          )}
         </div>
     </>
   )

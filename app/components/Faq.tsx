@@ -24,11 +24,11 @@ function Accordion() {
     return (
         <>
         <div className='pb-30'>
-        <h1 className='heading p-10 pb-15'>
+        <h1 className='heading p-10 pb-15 max-w-4xl mx-auto'>
         What Most Students Ask Us {' '} <br/>
             <span className='text-purple-300 '>(Before They Stop F*cking Up Interviews)</span>
         </h1>
-            <div className='accordion '>
+            <div className='accordion max-w-4xl mx-auto'>
                 <section className='accordion-heading'>
                     <Image src='/faq.png' height={100} width={100} alt="questions" />
                     <h1>FAQs</h1> 

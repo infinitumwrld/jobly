@@ -110,22 +110,84 @@ export async function createFeedback(params: CreateFeedbackParams){
 }
 
 export async function getFeedbackByInterviewId(params: GetFeedbackByInterviewIdParams): Promise<Feedback | null> {
-    
     const { interviewId, userId} = params;
     
     const feedback = await db
-    .collection('feedback')
-    .where('interviewId', '==', interviewId)
-    .where('userId', '==', userId )
-    .limit(1)
-    .get();
+        .collection('feedback')
+        .where('interviewId', '==', interviewId)
+        .where('userId', '==', userId)
+        .get();
 
     if(feedback.empty) return null;
 
-    const feedbackDoc = feedback.docs[0];
+    // Convert all feedback to properly structured objects
+    const feedbacks = feedback.docs.map(doc => {
+        const data = doc.data();
+        return {
+            id: doc.id,
+            interviewId: data.interviewId,
+            userId: data.userId,
+            totalScore: data.totalScore,
+            categoryScores: data.categoryScores,
+            strengths: data.strengths,
+            areasForImprovement: data.areasForImprovement,
+            finalAssessment: data.finalAssessment,
+            createdAt: data.createdAt || new Date().toISOString()
+        } as Feedback;
+    });
 
-    return {
-        id: feedbackDoc.id, ... feedbackDoc.data()
-    } as Feedback;
+    // Sort by createdAt in descending order and take the most recent
+    feedbacks.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
+    return feedbacks[0];
+}
+
+export async function getFeedbackByInterviewIds(params: { interviewIds: string[], userId: string }): Promise<Record<string, Feedback>> {
+    const { interviewIds, userId } = params;
+    
+    // Get all feedback without ordering in the query
+    const feedback = await db
+        .collection('feedback')
+        .where('userId', '==', userId)
+        .where('interviewId', 'in', interviewIds)
+        .get();
+
+    const feedbackMap: Record<string, Feedback> = {};
+    
+    // Group feedback by interviewId and sort in memory
+    const feedbackGroups: Record<string, Feedback[]> = {};
+    
+    feedback.docs.forEach(doc => {
+        const data = doc.data();
+        const feedbackItem = {
+            id: doc.id,
+            interviewId: data.interviewId,
+            userId: data.userId,
+            totalScore: data.totalScore,
+            categoryScores: data.categoryScores,
+            strengths: data.strengths,
+            areasForImprovement: data.areasForImprovement,
+            finalAssessment: data.finalAssessment,
+            createdAt: data.createdAt || new Date().toISOString()
+        } as Feedback;
+
+        if (!feedbackGroups[data.interviewId]) {
+            feedbackGroups[data.interviewId] = [];
+        }
+        feedbackGroups[data.interviewId].push(feedbackItem);
+    });
+
+    // For each interview, sort its feedback by date and take the latest
+    Object.entries(feedbackGroups).forEach(([interviewId, feedbacks]) => {
+        // Sort by createdAt in descending order
+        feedbacks.sort((a, b) => 
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        // Take the latest feedback
+        feedbackMap[interviewId] = feedbacks[0];
+    });
+
+    return feedbackMap;
 }

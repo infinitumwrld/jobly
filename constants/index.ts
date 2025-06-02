@@ -310,31 +310,31 @@ export const dummyInterviews: Interview[] = [
   export const testimonials = [
     {
       quote:
-        "I used to freeze up during interviews and had no clue how to answer on the spot. Skill Set’s real-time feedback helped me stay calm, confident, and actually know what to say. After using it, I nailed my Google interview—and now I’m in!",
+        "I used to freeze up during interviews and had no clue how to answer on the spot. Skill Set's real-time feedback helped me stay calm, confident, and actually know what to say. After using it, I nailed my Google interview—and now I'm in!",
       name: "James T.",
       title: "Google Software Engineer",
     },
     {
       quote:
-        "I tried other mock interview platforms, but they were just robotic. Skill Set felt like a real conversation. The feedback was specific and actually helped. It’s the reason I landed my internship at Meta.",
+        "I tried other mock interview platforms, but they were just robotic. Skill Set felt like a real conversation. The feedback was specific and actually helped. It's the reason I landed my internship at Meta.",
       name: "Sophia R.",
       title: "Meta intern",
     },
     {
       quote:
-        "I used to freeze up in interviews and blank on everything. Skill Set’s real-time feedback actually helped me stay calm and nail my answers. It felt like practicing with someone who actually gets it.",
+        "I used to freeze up in interviews and blank on everything. Skill Set's real-time feedback actually helped me stay calm and nail my answers. It felt like practicing with someone who actually gets it.",
       name: "Alex K.",
       title: " Software Developer",
     },
     {
       quote:
-        "Interviewing used to feel like a guessing game. Skill Set’s AI broke down exactly what I was messing up, from my tone to how I structured my answers. After just a few sessions, I started getting offers from companies like Netflix and Spotify.",
+        "Interviewing used to feel like a guessing game. Skill Set's AI broke down exactly what I was messing up, from my tone to how I structured my answers. After just a few sessions, I started getting offers from companies like Netflix and Spotify.",
       name: "Olivia G.",
       title: "UX Designer",
     },
     {
       quote:
-        "I’d always get to the final round and then lose out. Skill Set pinpointed exactly where I was going wrong in my interviews and gave me real-time tips to fix it. The difference was huge and now I’ve landed my first full-time role at Adobe!",
+        "I'd always get to the final round and then lose out. Skill Set pinpointed exactly where I was going wrong in my interviews and gave me real-time tips to fix it. The difference was huge and now I've landed my first full-time role at Adobe!",
       name: " Tom H.",
       title: "Adobe Developer",
     },
@@ -344,7 +344,7 @@ export const dummyInterviews: Interview[] = [
     {
       id: 1,
       name: "google",
-      img: "/google.svg",
+      img: "/google1.svg",
       nameImg: "",
     },
     { 
@@ -359,7 +359,6 @@ export const dummyInterviews: Interview[] = [
       img: "/meta.svg",
       nameImg: "",
     }, 
-
     {
       id: 5,
       name: "stripe",
@@ -386,7 +385,7 @@ export const dummyInterviews: Interview[] = [
     {
       id: 3,
       title: "Tailored to Tech, Not Just Talk",
-      desc: "This isn’t some generic bullsh*t. You’ll train with real software engineering questions —exactly what the top companies actually ask.",
+      desc: "This isn't some generic bullsh*t. You'll train with real software engineering questions —exactly what the top companies actually ask.",
       className: "md:col-span-2", // change to md:col-span-2
       thumbnail: "/exp3.svg",
     },
@@ -459,7 +458,7 @@ export const dummyInterviews: Interview[] = [
       features: [
         "Access for multiple students at a discounted rate",
         "Unlimited interviews and feedback for each student",
-        "Customizable packages to fit the institution’s needs",
+        "Customizable packages to fit the institution's needs",
       ],
       icon: "/images/hexagon.svg",
       logo: "college.png",
@@ -469,19 +468,19 @@ export const dummyInterviews: Interview[] = [
   export const faq = [
     {
         question: 'How is Skill Set different from other interview prep platforms?',
-        answer: 'We are more than just a bunch of mock interviews – it’s real prep that actually helps you improve. Our AI gives you personalized feedback that focuses on the areas you need to work on, and we simulate real interview scenarios so you’re fully prepared for the real thing.'
+        answer: "We are more than just a bunch of mock interviews - it's real prep that actually helps you improve. Our AI gives you personalized feedback that focuses on the areas you need to work on, and we simulate real interview scenarios so you're fully prepared for the real thing."
     },
     {
-        question: ' Is Skill Set suitable for all students?',
-        answer: 'YES. If you’re a tech or computer science student looking to land an internship or start your career after graduation, Skill Set is built for you. We focus on preparing you for the exact types of interviews you’ll face, so you’re ready for anything.'
+        question: "Is Skill Set suitable for all students?",
+        answer: "YES. If you're a tech or computer science student looking to land an internship or start your career after graduation, Skill Set is built for you. We focus on preparing you for the exact types of interviews you'll face, so you're ready for anything."
     },
     {
         question: 'What kind of feedback will I get?',
-        answer: 'After your interview, you’ll get feedback that’s actually useful. We’re talking about detailed insights on your answers, how you communicated, and where you can improve. It’s not just generic feedback – it’s tailored to help you get better, fast. And give you feedback based on what the top companies actually look for.'
+        answer: "After your interview, you'll get feedback that's actually useful. We're talking about detailed insights on your answers, how you communicated, and where you can improve. It's not just generic feedback – it's tailored to help you get better, fast. And give you feedback based on what the top companies actually look for."
     },
     {
-        question: 'How do I get started?',
-        answer: 'Easy. Just sign up for our $3 trial, take an interview, and see for yourself how we can help. No complicated sign-up process, no hidden fees – just straight to the good stuff.'
+        question: "How do I get started?",
+        answer: "Easy. Just sign up for our $3 trial, take an interview, and see for yourself how we can help. No complicated sign-up process, no hidden fees – just straight to the good stuff."
     },
   
 

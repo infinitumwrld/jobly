@@ -5,173 +5,131 @@ import clsx from 'clsx';
 import CountUp from "react-countup";
 import { plans } from '@/constants/index'
 import React from 'react'
-import MagicButton from "./ui/MagicButton";
-import { FaLocationArrow } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa6";
 import CheckoutButton from "./ui/checkoutButton";
 
-
 const Prices = () => {
-
-    const [monthly, setMonthly] = useState(false);
+  const [monthly, setMonthly] = useState(true);
 
   return (
-    <section className="pb-15">
-    <div id="pricing">
-      <div className="container -pb-10">
-        <div className="max-w-[960px] pricing-head_before relative mx-auto border-l border-r border-[#0A0A0A] bg-[#0A0A0A]/50 pb-40 pt-28 max-xl:max-w-4xl max-lg:border-none max-md:pb-32 max-md:pt-16">
-          <p className="heading mb-15">
-           Find Your Perfect Fit For SkillSet
+    <section className="relative py-24 overflow-hidden" id="pricing">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h2 className="heading mb-4 text-white">
+            Find your perfect match for<span className='text-purple-300'> SkillSet </span>
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Simple and transparent pricing for everyone.
           </p>
+        </div>
 
-          <div className="relative z-4 mx-auto flex w-[375px] rounded-3xl border-[3px] border-[#F4F5F4]/25 bg-[#120B2A]/50 p-2 -mb-10 backdrop-blur-[6px] max-md:w-[310px]">
+        {/* Monthly/Yearly Toggle */}
+        <div className="flex justify-center mb-15">
+          <div className="relative inline-flex items-center p-1 bg-black/20 backdrop-blur-xl border border-white/10 rounded-full shadow-xl">
             <button
-              className={clsx("pricing-head_btn", monthly && "text-[#7d7e81]")}
+              className={clsx(
+                "relative px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 cursor-pointer",
+                monthly ? "text-white bg-[#8b5cf6] shadow-lg" : "text-white/60 hover:text-white/80"
+              )}
               onClick={() => setMonthly(true)}
             >
               Monthly
             </button>
             <button
-              className={clsx("pricing-head_btn", !monthly && "text-[#7d7e81]")}
+              className={clsx(
+                "relative px-6 py-2 text-sm font-medium rounded-full transition-all duration-300 cursor-pointer",
+                !monthly ? "text-white bg-[#8b5cf6] shadow-lg" : "text-white/60 hover:text-white/80"
+              )}
               onClick={() => setMonthly(false)}
             >
-              Annual
+              Yearly
             </button>
-
-            <div
-              className={clsx(
-                "g4 rounded-[14px] before:h-[100px] pricing-head_btn_before absolute left-2 top-2 h-[calc(100%-16px)] w-[calc(50%-8px)] overflow-hidden shadow-[0px_16px_24px_rgba(0,0,0,0.25),inset_0px_3px_6px_#] transition-transform duration-500",
-                !monthly && "translate-x-full",
-              )}
-            />  
           </div>
+        </div>
 
-         { /*<div className="pricing-bg">
-            <img
-              src="/bg-outlines.svg"
-              width={960}
-              height={380}
-              alt="outline"
-              className="relative z-2"
-            />
-            <img
-              src="/images/bg-outlines-fill.png"
-              width={960}
-              height={380}
-              alt="outline"
-              className="absolute inset-0 opacity-5 mix-blend-soft-light"
-            />
-          </div> */}
-        </div> 
-
-        {/*  pricing section*/}
-        <div className="scroll-hide relative z-2 -mt-12 flex items-start max-xl:gap-5 max-xl:overflow-auto max-xl:pt-6">
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={plan.id}
-              className="pricing-plan_first pricing-plan_last pricing-plan_odd pricing-plan_even relative border-2 p-7 max-xl:min-w-80 max-lg:rounded-3xl xl:w-[calc(33.33%+2px)]"
+              className={clsx(
+                "relative rounded-2xl border border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl p-8 transition-all duration-500 cursor-pointer group",
+                "before:absolute before:inset-0 before:-z-10 before:rounded-2xl before:bg-gradient-to-b before:from-white/[0.03] before:to-transparent",
+                "hover:scale-[1.02] hover:bg-[#0A0A0A]/90",
+                index === 1 ? [
+                  "shadow-[0_0_20px_5px_rgba(139,92,246,0.15)]",
+                  "after:absolute after:inset-0 after:-z-20 after:rounded-2xl after:shadow-[0_4px_24px_-4px_rgba(139,92,246,0.3)]",
+                  "translate-y-[-4px]",
+                  "scale-[1.02]",
+                  "hover:translate-y-[-6px]",
+                  "hover:scale-[1.04]",
+                  "hover:shadow-[0_0_25px_8px_rgba(139,92,246,0.2)]"
+                ] : ""
+              )}
             >
+              {/* Popular Badge */}
               {index === 1 && (
-                <div className="g4 absolute h-[330px]    left-0 right-0 top-0 z-1 rounded-tl-3xl rounded-tr-3xl" /> ///
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#8b5cf6] text-white px-4 py-1 rounded-full text-sm font-medium shadow-[0_4px_12px_-2px_rgba(139,92,246,0.4)]">
+                  Most popular
+                </div>
               )}
 
-              <div
-                className={clsx(
-                  " absolute left-0 right-0 z-2 flex items-center justify-center",
-                  index === 1 ? "-top-6  " : "-top-6 xl:-top-11",
-                )}
-              >
+              {/* Plan Header */}
+              <div className="text-center mb-8">
                 <img
                   src={plan.logo}
                   alt={plan.title}
-                  className={clsx(
-                    "object-contain drop-shadow-2xl",
-                    index === 1 ? "size-[120px]  " : "size-[88px]",
-                  )}
+                  className="mx-auto mb-4 h-16 w-16 object-contain drop-shadow-2xl"
                 />
-              </div>
-              <div
-                className={clsx(
-                  "relative flex flex-col items-center",
-                  index === 1 ? "pt-24 " : "pt-12",
-                )}
-              >
-               
-                <div
-                  className={clsx(
-                    "small-2 rounded-[20px] relative z-2 mx-auto mb-6 border-2 px-4 py-1.5 uppercase",
-                    index === 1 ?  "border-[#4820FF]   text-[#4820FF]" : "border-[#B49CE5] text-[#B49CE5]",
-                  )}
-                >
-                  {plan.title}
+                <h3 className="heading-3 mb-2 text-white">{plan.title}</h3>
+                <div className="flex items-center justify-center gap-1">
+                  <span className="text-3xl md:text-4xl font-bold text-white">$</span>
+                  <CountUp
+                    className="text-3xl md:text-4xl font-bold text-white"
+                    start={plan.priceMonthly}
+                    end={monthly ? plan.priceMonthly : plan.priceYearly}
+                    duration={0.4}
+                    useEasing={false}
+                    preserveValue
+                  />
+                  <span className="text-lg font-light text-white/60 self-end mb-1">/month</span>
                 </div>
-              
-
-                <div className="relative z-2 flex items-center justify-center" >
-                  <div
-                    className={clsx(
-                      "h-num flex items-start text-lg",
-                      index === 1 ? "text-[#EAEDFF] " : "text-[#bebebe]",
-                    )}
-                  >
-                    ${" "}
-                    <CountUp
-                      start={plan.priceMonthly}
-                      end={monthly ? plan.priceMonthly : plan.priceYearly}
-                      duration={0.4}
-                      useEasing={false}
-                      preserveValue
-                    />
-                  </div>
-                  <div className="small-1 relative top-3 ml-1 uppercase">
-                    / mo
-                  </div>
-                </div>
-              </div>
-
-              <div
-                className={clsx(
-                  "body-1 relative z-2 mb-10 w-full border-b-[#353535] pb-9 text-center text-[#EAEDFF]",
-                  index === 1 && "border-b ",
+                {!monthly && (
+                  <p className="text-sm text-white/60 mt-2 font-light">
+                    ${plan.priceYearly * 12} billed annually
+                  </p>
                 )}
-              >
-                {plan.caption}
               </div>
 
-              <ul className="mx-auto space-y-4 xl:px-7">
+              {/* Features */}
+              <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
-                  <li
-                    key={feature}
-                    className="relative flex items-center gap-5"
-                  >
-                    <img
-                      src={"/check.png"}
-                      alt="check"
-                      className="size-10 object-contain"
-                    />
-                    <p className="flex-1">{feature}</p>
+                  <li key={feature} className="flex items-center gap-3 text-white/80">
+                    <FaCheck className="text-indigo-400 flex-shrink-0" />
+                    <span className="text-sm font-light">{feature}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="mt-10 flex w-full justify-center" >
-              
-              <CheckoutButton plan={plan.title}/>
-              
+              {/* CTA Button */}
+              <div className="mt-auto">
+                <CheckoutButton 
+                  plan={plan.title}
+                  className={clsx(
+                    "w-full cursor-pointer transition-all duration-300 font-medium",
+                    index === 1 
+                      ? "bg-[#8b5cf6] hover:bg-[#7c3aed] text-white shadow-xl hover:shadow-[#8b5cf6]/25" 
+                      : "bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                  )}
+                />
               </div>
-
-              {index === 1 && (
-                <p className="small-compact mt-9 text-center text-p3 before:mx-2.5 before:content-['-'] after:mx-2.5 after:content-['-']">
-                  Limited time offer
-                </p>
-              )}
             </div>
           ))}
         </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
 };
 
-
-export default Prices
+export default Prices;

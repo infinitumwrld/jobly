@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { InfiniteMovingCards } from './ui/infiniteMovingCards'
-import { companies, testimonials } from '@/constants'
-import Image from 'next/image'
+import { testimonials } from '@/constants'
+
 
 const Clients = () => {
   return (

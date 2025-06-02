@@ -5,12 +5,16 @@ import { getRandomInterviewCover } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import DisplayTechicons from './DisplayTechicons';
-import { getFeedbackByInterviewId } from '@/lib/actions/generalaction';
+
+interface InterviewCardProps extends Interview {
+  feedback?: Feedback | null;
+}
  
-const InterviewCard = async ({ id, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
-  const feedback = userId && id ? await getFeedbackByInterviewId({ interviewId: id, userId }) : null 
+const InterviewCard = ({ id, userId, role, type, techstack, createdAt, feedback }: InterviewCardProps) => {
   const normalizedType = /mix/gi.test(type) ? 'Mixed' : type;
-  const formattedDate =  dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D,YYYY'); 
+  const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D,YYYY'); 
+  
+  const interviewPath = feedback ? `/interview/${id}/feedback` : `/interview/${id}`;
 
   return (
     <div className='card-border w-[360px] max-sm:w-full min-h-96'>
@@ -47,16 +51,16 @@ const InterviewCard = async ({ id, userId, role, type, techstack, createdAt }: I
                     <DisplayTechicons techStack={techstack} />
 
                     <Button className='btn-primary'>
-                        <Link href={feedback
-                            ? `/interview/${id}/feedback` : `/interview/${id}`
-                        }>
+                        <Link 
+                          href={interviewPath}
+                          prefetch={true}
+                        >
                             {feedback ? 'Check Feedback' : 'View interview'}
                         </Link>
                     </Button>
                 </div>
             </div>
         </div>
-    
   )
 }
 

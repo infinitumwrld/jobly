@@ -23,7 +23,7 @@ const Footer = () => {
             Everyone’s selling shortcuts. We give you the edge that actually works.
                         </p>
 
-            <a href='#pricing'>
+            <a href=''>
                 <MagicButton title='Try SkillSet Now' icon={<FaLocationArrow/>} position='right'  />
             </a>
         </div>

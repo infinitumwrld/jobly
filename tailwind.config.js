@@ -1,0 +1,67 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        'primary-100': 'var(--color-primary-100)',
+        'primary-200': 'var(--color-primary-200)',
+        'light-100': 'var(--color-light-100)',
+        'light-400': 'var(--color-light-400)',
+        'light-600': 'var(--color-light-600)',
+        'light-800': 'var(--color-light-800)',
+        'dark-100': 'var(--color-dark-100)',
+        'dark-200': 'var(--color-dark-200)',
+        'dark-300': 'var(--color-dark-300)',
+        'destructive-100': 'var(--color-destructive-100)',
+        'destructive-200': 'var(--color-destructive-200)',
+        'success-100': 'var(--color-success-100)',
+        'success-200': 'var(--color-success-200)',
+        card: 'var(--card)',
+        'card-foreground': 'var(--card-foreground)',
+        primary: 'var(--primary)',
+        'primary-foreground': 'var(--primary-foreground)',
+        secondary: 'var(--secondary)',
+        'secondary-foreground': 'var(--secondary-foreground)',
+        destructive: 'var(--destructive)',
+        muted: 'var(--muted)',
+        'muted-foreground': 'var(--muted-foreground)',
+        accent: 'var(--accent)',
+        'accent-foreground': 'var(--accent-foreground)',
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
+      },
+      backgroundColor: theme => ({
+        ...theme('colors'),
+        background: 'var(--background)',
+      }),
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      minWidth: {
+        '28': '7rem',
+      },
+      minHeight: {
+        '10': '2.5rem',
+        '12': '3rem',
+      },
+      backgroundImage: {
+        'gradient-dark': 'linear-gradient(to bottom, var(--color-dark-200), var(--color-dark-300))',
+        'gradient-blue': 'linear-gradient(to left, #FFFFFF, #CAC5FE)',
+        'gradient-border': 'linear-gradient(to bottom, #4B4D4F, rgba(75, 77, 79, 0.2))',
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+} 

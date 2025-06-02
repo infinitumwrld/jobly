@@ -520,37 +520,6 @@
   to { transform: translate(calc(-50% - 0.5rem)); }
 }
 /* Add other animations here */
-.pricing-head_before {
-  @apply before:absolute before:-bottom-44 before:left-1/5 before:h-96 before:w-13/20 before:bg-[#34208A] before:blur-[200px] before:content-[''];
-}
-
-.pricing-head_btn {
-  @apply font-bold relative z-2 h-16 cursor-pointer flex-1 uppercase text-[#e4e7f5] transition-colors duration-500 hover:text-[#8d8d8f];
-}
-
-.pricing-head_btn_before {
-  @apply before:absolute before:-top-16 before:left-9 before:right-9 before:bg-[#4820ff] before:blur-xl before:content-[""];
-}
-
-.pricing-bg {
-  @apply pointer-events-none absolute -bottom-16 left-[calc(50%-480px)] z-2 mx-auto w-960;
-}
-
-.pricing-plan_first {
-  @apply first:rounded-bl-3xl first:rounded-tl-3xl lg:first:border-r-0;
-}
-
-.pricing-plan_last {
-  @apply last:rounded-br-3xl last:rounded-tr-3xl lg:last:border-l-0;
-}
-
-.pricing-plan_odd {
-  @apply odd:border-[#2e2e2e]  odd:bg-[#0A0A0A] lg:odd:mt-12;
-} 
-
-.pricing-plan_even {
-  @apply even:bg-[#0A0A0A] even:rounded-bl-3xl even:rounded-br-3xl even:rounded-tl-3xl even:rounded-tr-3xl  even:border-[#000000];
-}
 .container {
   @apply mx-auto max-w-[1252px] px-16 max-xl:px-10 max-lg:px-6 max-sm:px-4 ;
 }
@@ -563,10 +532,6 @@
 .base-bold {
   @apply text-[16px] font-bold leading-[24px];
 }
-.h-num {
-  @apply font-bold text-[72px] leading-[84px];
-}
-
 .scroll-hide::-webkit-scrollbar {
   display: none;
 }

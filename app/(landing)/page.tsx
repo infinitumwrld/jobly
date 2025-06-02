@@ -1,15 +1,42 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import Hero from '../components/Hero'
 import { FloatingNav } from '../components/ui/FloatingNav'
 import { FaHome } from 'react-icons/fa'
-import Grid from '../components/Grid'
-import RecentProjects from '../components/RecentProjects'
 import { navItems } from '@/constants'
-import Clients from '../components/Clients'
-import Prices from '../components/Prices'
-import Footer from '../components/Footer'
-import Faq from '../components/Faq'
 
+const LoadingFallback = () => <div className="w-full h-32 animate-pulse bg-gray-900/50 rounded-lg" />
+
+// Dynamically import non-critical components with SSR enabled but optimized loading
+const Grid = dynamic(() => import('../components/Grid'), {
+  loading: LoadingFallback,
+  ssr: true
+})
+
+const Clients = dynamic(() => import('../components/Clients'), {
+  loading: LoadingFallback,
+  ssr: true
+})
+
+const RecentProjects = dynamic(() => import('../components/RecentProjects'), {
+  loading: LoadingFallback,
+  ssr: true
+})
+
+const Prices = dynamic(() => import('../components/Prices'), {
+  loading: LoadingFallback,
+  ssr: true
+})
+
+const Faq = dynamic(() => import('../components/Faq'), {
+  loading: LoadingFallback,
+  ssr: true
+})
+
+const Footer = dynamic(() => import('../components/Footer'), {
+  loading: LoadingFallback,
+  ssr: true
+})
 
 const page = () => {
   return (
@@ -19,7 +46,7 @@ const page = () => {
         <Hero />
         <Grid />
         <Clients />
-        <RecentProjects /> 
+        <RecentProjects />
         <Prices />
         <Faq />
         <Footer />
