@@ -98,6 +98,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
   };
 
   const handleGoogleSignIn = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
@@ -108,32 +111,38 @@ const AuthForm = ({ type }: { type: FormType }) => {
         return;
       }
 
-      // If it's sign up, we need to create the user in our database
-      if (type === 'sign-up') {
-        const result = await signUp({
-          uid: userCredential.user.uid,
-          name: userCredential.user.displayName || 'Google User',
-          email: userCredential.user.email!,
-          password: '' // Google users don't need password
-        });
+      // Always try to create/update the user in our database
+      const result = await signUp({
+        uid: userCredential.user.uid,
+        name: userCredential.user.displayName || 'Google User',
+        email: userCredential.user.email!,
+        password: '' // Google users don't need password
+      });
 
-        if (!result?.success) {
-          toast.error(result?.message);
-          return;
-        }
+      // Even if user exists (result.success is false), proceed with sign in
+      if (!result?.success && !result?.message?.includes('already exists')) {
+        toast.error(result?.message || 'Failed to save user data');
+        return;
       }
 
       // Sign in the user
-      await signIn({
+      const signInResult = await signIn({
         email: userCredential.user.email!,
         idToken
       });
 
+      if (!signInResult?.success) {
+        toast.error(signInResult?.message || 'Failed to sign in');
+        return;
+      }
+
       toast.success('Signed in successfully with Google');
       router.push('/dashboard');
-    } catch (error) {
-      console.error(error);
-      toast.error('Failed to sign in with Google');
+    } catch (error: any) {
+      console.error('Google sign in error:', error);
+      toast.error(error?.message || 'Failed to sign in with Google');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 

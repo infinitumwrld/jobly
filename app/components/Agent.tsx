@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/generalaction';
@@ -11,9 +11,37 @@ import { auth } from '@/firebase/client';
 import { db } from '@/firebase/client';
 import { toast } from 'sonner';
 import {
-  collection, query, where, orderBy, limit, getDocs, Timestamp,
+  collection, query, where, orderBy, limit, getDocs, Timestamp, doc, getDoc,
 } from 'firebase/firestore';
-import { getCurrentUser, isAuthenticated } from '@/lib/actions/authaction';
+import { isAuthenticated } from '@/lib/actions/authaction';
+import { memo } from 'react';
+
+// Memoize static components
+const Avatar = memo(function Avatar({ isSpeaking }: { isSpeaking: boolean }) {
+  return (
+    <div className='avatar'>
+      <Image src="/ai-avatar.png" alt="vapi" width={65} height={54} className='object-cover' />
+      {isSpeaking && <span className='animate-speak' />}              
+    </div>
+  );
+});
+
+const UserAvatar = memo(function UserAvatar({ userName }: { userName: string }) {
+  return (
+    <div className='card-content'>
+      <Image 
+        src='/user-avatar.png' 
+        alt='user avatar' 
+        width={540} 
+        height={540} 
+        className='rounded-full object-cover size-[120px]'
+        priority={false}
+        loading="lazy"
+      /> 
+      <h3>{userName}</h3>
+    </div>
+  );
+});
 
 enum CallStatus {
   INACTIVE = 'INACTIVE',
@@ -33,7 +61,7 @@ const MAX_FEEDBACK_RETRIES = 3;
 const RETRY_DELAY = 2000; // 2 seconds
 const TRIAL_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
-const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps) => {
+const Agent = memo(function Agent({ userName, userId, type, interviewId, questions }: AgentProps) {
   const router = useRouter();
   const [isSpeaking, setIsSpeaking] = useState(false)
   const [callStatus, setcallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
@@ -171,7 +199,8 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
 
   const checkAccessStatus = useCallback(async () => {
     try {
-      if (!auth.currentUser) {
+      const isAuth = await isAuthenticated();
+      if (!isAuth || !auth.currentUser) {
         toast.error("Please sign in to continue.");
         router.push("/login");
         return false;
@@ -186,7 +215,7 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
         return true;
       }
 
-      // Check for active trial
+      // Check for active trial payment
       const since = Date.now() - TRIAL_DURATION;
       const uid = auth.currentUser.uid;
       const paymentsRef = collection(db, 'users', uid, 'payments');
@@ -203,7 +232,7 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
       const trialActive = !querySnapshot.empty;
 
       if (!trialActive) {
-        toast.error("Your trial has expired. Please upgrade to continue.");
+        toast.error("Please purchase a trial to start interviewing.");
         window.location.href = "/#pricing";
         return false;
       }
@@ -268,66 +297,62 @@ const Agent = ( { userName, userId, type, interviewId, questions } : AgentProps)
     }
   }
 
-  const latestMessage = messages[messages.length - 1]?.content;
-  const isCallInactiveOrFinished = callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED;
+  const latestMessage = useMemo(() => 
+    messages[messages.length - 1]?.content,
+    [messages]
+  );
+  
+  const isCallInactiveOrFinished = useMemo(() => 
+    callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED,
+    [callStatus]
+  );
 
   return (
     <>
-        <div className='call-view'>
-          <div className='card-interviewer'>
-            <div className='avatar'>
-              <Image src="/ai-avatar.png" alt="vapi" width={65} height={54} className='object-cover' />
-              {isSpeaking && <span className='animate-speak' />}              
-            </div>
-            <h3>
-              AI Interviewer
-            </h3>
-          </div>
-          <div className='card-border'>
-            <div className='card-content'>
-              <Image src='/user-avatar.png' alt='user avatar' width={540} height={540} className='rounded-full object-cover size-[120px]' /> 
+      <div className='call-view'>
+        <div className='card-interviewer'>
+          <Avatar isSpeaking={isSpeaking} />
+          <h3>AI Interviewer</h3>
+        </div>
+        <div className='card-border'>
+          <UserAvatar userName={userName} />
+        </div>
+      </div>
 
-              <h3>
-                {userName}
-              </h3>
-            </div>
+      {messages.length > 0 && (
+        <div className='transcript-border'>
+          <div className='transcript'>
+            <p key={latestMessage} className={cn('transition-opacity duration-500 opacity-0', 'animate-fadeIn opacity-100')}> 
+              {latestMessage}
+            </p>
           </div>
         </div>
+      )}
 
-        { messages.length > 0 && (
-          <div className='transcript-border'>
-            <div className='transcript'>
-              <p key={latestMessage} className={cn('transition-opacity duration-500 opacity-0', 'animate-fadeIn opacity-100')}> 
-                {latestMessage}
-              </p>
-            </div>
-          </div>
+      <div className='w-full flex justify-center'>
+        {callStatus === CallStatus.ACTIVE ? (
+          <button className='btn-disconnect' onClick={handleDisconnect}>
+            End Call
+          </button>
+        ) : isGeneratingFeedback ? (
+          <button className='btn-call' disabled>
+            Generating Feedback... Please wait
+          </button>
+        ) : (
+          <button 
+            className='relative btn-call' 
+            onClick={handleCall}
+            disabled={callStatus === CallStatus.CONNECTING}
+          >
+            <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== CallStatus.CONNECTING && 'hidden')} />
+            <span>
+              {isCallInactiveOrFinished ? 'Start Call' : 'Connecting...'} 
+            </span>
+          </button>
         )}
-
-        <div className='w-full flex justify-center'>
-          {callStatus === CallStatus.ACTIVE ? (
-            <button className='btn-disconnect' onClick={handleDisconnect}>
-              End Call
-            </button>
-          ) : isGeneratingFeedback ? (
-            <button className='btn-call' disabled>
-              Generating Feedback... Please wait
-            </button>
-          ) : (
-            <button 
-              className='relative btn-call' 
-              onClick={handleCall}
-              disabled={callStatus === CallStatus.CONNECTING}
-            >
-              <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== CallStatus.CONNECTING && 'hidden')} />
-              <span>
-                {isCallInactiveOrFinished ? 'Start Call' : 'Connecting...'} 
-              </span>
-            </button>
-          )}
-        </div>
+      </div>
     </>
-  )
-}
+  );
+});
 
-export default Agent
+export default Agent;
