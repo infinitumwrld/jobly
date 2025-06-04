@@ -10,31 +10,33 @@ import {
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
-type ButtonProps = {
+type ButtonProps<T extends React.ElementType = 'button'> = {
   borderRadius?: string;
   children: React.ReactNode;
-  as?: React.ElementType;
+  as?: T;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
-} & React.HTMLAttributes<HTMLElement>;
+} & React.ComponentPropsWithoutRef<T>;
 
-export function Button({
+export function Button<T extends React.ElementType = 'button'>({
   borderRadius = "1.75rem",
   children,
-  as: Component = "button",
+  as,
   containerClassName,
   borderClassName,
   duration,
   className,
   ...otherProps
-}: ButtonProps) {
+}: ButtonProps<T>) {
+  const Component = as || 'button';
+  
   return (
     <Component
       className={cn(
         "relative md:col-span-2 md:row-span-2 overflow-hidden bg-transparent p-[1px] text-xl",
-        containerClassName,
+        containerClassName
       )}
       style={{
         borderRadius: borderRadius,
@@ -49,7 +51,7 @@ export function Button({
           <div
             className={cn(
               "h-20 w-20 bg-[radial-gradient(#7c3aed_40%,transparent_60%)] opacity-[0.8] ",
-              borderClassName,
+              borderClassName
             )}
           />
         </MovingBorder>
@@ -58,7 +60,7 @@ export function Button({
       <div
         className={cn(
           "relative flex h-full w-full items-center justify-center border border-purple-600 bg-black-500 text-sm text-white antialiased backdrop-blur-xl p-4",
-          className,
+          className
         )}
         style={{
           borderRadius: `calc(${borderRadius} * 0.96)`,
