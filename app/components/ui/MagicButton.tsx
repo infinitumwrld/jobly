@@ -96,8 +96,8 @@ const MagicButton = ({
   }, []);
 
   // Debounce the click handlers
-  const debouncedTrialCheckout = useCallback(
-    debounce(async () => {
+  const debouncedTrialCheckout = useCallback(() => {
+    const handler = async () => {
       if (isLoading) return;
       setIsLoading(true);
 
@@ -152,18 +152,15 @@ const MagicButton = ({
         toast.error("An error occurred during checkout. Please try again.");
         setIsLoading(false);
       }
-    }, 500),
-    [isLoading, isAuthenticated, router, createCheckoutSession]
-  );
+    };
+    debounce(handler, 500)();
+  }, [isLoading, isAuthenticated, router, createCheckoutSession]);
 
-  const debouncedHandleClick = useCallback(
-    debounce(() => {
-      if (handleClick) {
-        handleClick();
-      }
-    }, 500),
-    [handleClick]
-  );
+  const debouncedHandleClick = useCallback(() => {
+    if (handleClick) {
+      debounce(handleClick, 500)();
+    }
+  }, [handleClick]);
 
   const LoadingSpinner = () => (
     <div className="w-full gap-x-2 flex justify-center items-center">
