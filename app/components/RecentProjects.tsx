@@ -21,15 +21,14 @@ const RecentProjects = () => {
               duration={Math.floor(Math.random() * 10000) + 10000}
               borderRadius= '1.75rem'
               className='flex-1 text-white border-neutral-200 dark:border-slate-700'
-              
             >
               <div className='flex lg:flex-row flex-col lg:items-center p-3 py-6 md:p-5 lg:p-10 gap-2 mt-5'>
                 <Image 
                   src={card.thumbnail} 
                   alt={card.title} 
-                  width={300}
-                  height={200}
-                  className="w-full h-48 object-cover rounded-lg"
+                  width={120}
+                  height={120}
+                  className="object-contain"
                 />
               </div>
               <div className='lg:ms-5'>

@@ -19,7 +19,7 @@ const VideoSection = () => (
         title="How SkillSet Works:"
         allow="clipboard-write; encrypted-media; picture-in-picture"
         referrerPolicy="strict-origin-when-cross-origin"
-        loading="lazy"
+        loading="eager"
         allowFullScreen>
       </iframe>
     </div>
@@ -40,8 +40,8 @@ const Hero = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Wait for text animation to complete (adjust timing if needed)
-          setTimeout(() => setShouldLoadVideo(true), 3000);
+          // Wait for text animation to complete (2 seconds total)
+          setTimeout(() => setShouldLoadVideo(true), 2000);
         }
       },
       { threshold: 0.1 }
@@ -89,7 +89,7 @@ const Hero = () => {
                 </p>
                 <div className="flex flex-wrap items-center justify-center gap-4 md:gap-16 max-lg:mt-10">
                     {companies.map(({ id, img, name }) => (
-                        <div key={id} className='flex md:max-60 max-w-30 gap-2'>
+                        <div key={id} className='flex md:max-w-40 max-w-24 gap-2'>
                             <Image
                                 src={img}
                                 alt={name}

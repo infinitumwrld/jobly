@@ -5,6 +5,7 @@ import ThreeGlobe from "three-globe";
 import { useThree, Canvas, extend } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import countries from "@/data/globe.json";
+
 declare module "@react-three/fiber" {
   interface ThreeElements {
     threeGlobe: ThreeElements["mesh"] & {
@@ -231,6 +232,30 @@ export function Globe({ globeConfig, data }: WorldProps) {
   return <group ref={groupRef} />;
 }
 
+export function genRandomNumbers(min: number, max: number, count: number) {
+  const arr = [];
+  while (arr.length < count) {
+    const r = Math.floor(Math.random() * (max - min)) + min;
+    if (arr.indexOf(r) === -1) arr.push(r);
+  }
+  return arr;
+}
+
+// Client-side wrapper component
+export default function ClientGlobe(props: WorldProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
+  return <Globe {...props} />;
+}
+
 export function WebGLRendererConfig() {
   const { gl, size } = useThree();
 
@@ -293,14 +318,4 @@ export function hexToRgb(hex: string) {
         b: parseInt(result[3], 16),
       }
     : null;
-}
-
-export function genRandomNumbers(min: number, max: number, count: number) {
-  const arr = [];
-  while (arr.length < count) {
-    const r = Math.floor(Math.random() * (max - min)) + min;
-    if (arr.indexOf(r) === -1) arr.push(r);
-  }
-
-  return arr;
 }

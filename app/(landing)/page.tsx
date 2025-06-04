@@ -4,12 +4,16 @@ import Hero from '../components/Hero'
 import { FloatingNav } from '../components/ui/FloatingNav'
 import { navItems } from '@/constants'
 
-const LoadingFallback = () => <div className="w-full h-32 animate-pulse bg-gray-900/50 rounded-lg" />
+const LoadingFallback = () => (
+  <div className="w-full min-h-[400px] animate-pulse bg-gray-900/50 rounded-lg flex items-center justify-center">
+    <div className="text-gray-400">Loading section...</div>
+  </div>
+)
 
 // Dynamically import non-critical components with SSR enabled but optimized loading
 const Grid = dynamic(() => import('../components/Grid'), {
-  loading: LoadingFallback,
-  ssr: true
+  ssr: true,
+  loading: () => <LoadingFallback />
 })
 
 const Clients = dynamic(() => import('../components/Clients'), {
@@ -43,7 +47,9 @@ const page = () => {
       <div className='max-w-7xl w-full'>
         <FloatingNav navItems={navItems}/>
         <Hero />
-        <Grid />
+        <React.Suspense fallback={<LoadingFallback />}>
+          <Grid />
+        </React.Suspense>
         <Clients />
         <RecentProjects />
         <Prices />

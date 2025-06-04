@@ -111,7 +111,7 @@ const Prices = () => {
                     <Image 
                       src="/check.svg" 
                       alt="check" 
-                      width={20} 
+                      width={20}
                       height={20}
                       className="w-5 h-5"
                     />

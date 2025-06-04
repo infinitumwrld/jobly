@@ -3,7 +3,6 @@ import React, { Suspense } from 'react'
 import { BentoGrid, BentoGridItem } from './ui/BentoGrid'
 import { gridItems } from '@/constants'
 
-// Loading fallback for grid items
 const GridItemFallback = () => (
   <div className="animate-pulse">
     <div className="h-64 bg-gray-800 rounded-3xl"></div>
