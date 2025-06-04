@@ -153,7 +153,7 @@ const MagicButton = ({
         setIsLoading(false);
       }
     }, 500),
-    [isLoading, isAuthenticated, router]
+    [isLoading, isAuthenticated, router, createCheckoutSession]
   );
 
   const debouncedHandleClick = useCallback(

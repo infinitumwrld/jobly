@@ -30,7 +30,7 @@ export const TextGenerateEffect = ({
         ease: easeOut
       }
     );
-  }, [scope.current, animate, filter, duration]);
+  }, [animate, filter, duration]);
 
   const renderWords = () => {
     return (

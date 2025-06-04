@@ -24,6 +24,55 @@ const authFormSchema = (type : FormType) => {
   })
 }
 
+const debouncedSubmitFn = debounce(async (values: z.infer<typeof authFormSchema>, type: FormType, router: AppRouterInstance, setIsSubmitting: (value: boolean) => void) => {
+  if (setIsSubmitting) return;
+  setIsSubmitting(true);
+
+  try {
+    if(type === 'sign-up') {
+      const {name, email, password} = values
+      
+      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+
+      const result = await signUp({
+        uid: userCredentials.user.uid,
+        name: name!,
+        email,
+        password
+      })
+
+      if (!result?.success) {
+        toast.error(result?.message);
+        return;
+      }
+
+      toast.success('Account created successfully. Please sign in.'); 
+      router.push('/sing-in')
+    } else {
+      const {email, password} = values;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredential.user.getIdToken();
+
+      if (!idToken) {
+        toast.error('Sign in failed')
+        return;
+      }
+
+      await signIn({
+        email, idToken
+      })
+
+      toast.success('Sign in successfully.'); 
+      router.push('/dashboard')
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error(`There was an error: ${error}`)
+  } finally {
+    setIsSubmitting(false);
+  }
+}, 1000); // Longer delay for auth operations
+
 const AuthForm = ({ type }: { type: FormType }) => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,61 +88,57 @@ const AuthForm = ({ type }: { type: FormType }) => {
   })
  
   // Debounced submit handler with proper loading state
-  const debouncedSubmit = useCallback(
-    debounce(async (values: z.infer<typeof formSchema>) => {
-      if (isSubmitting) return;
-      setIsSubmitting(true);
+  const handleSubmit = useCallback(async (values: z.infer<typeof formSchema>) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
-      try {
-        if(type === 'sign-up') {
-          const {name, email, password} = values
-          
-          const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+    try {
+      if(type === 'sign-up') {
+        const {name, email, password} = values
+        
+        const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
-          const result = await signUp({
-            uid: userCredentials.user.uid,
-            name: name!,
-            email,
-            password
-          })
+        const result = await signUp({
+          uid: userCredentials.user.uid,
+          name: name!,
+          email,
+          password
+        })
 
-          if (!result?.success) {
-            toast.error(result?.message);
-            return;
-          }
-
-          toast.success('Account created successfully. Please sign in.'); 
-          router.push('/sing-in')
-        } else {
-          const {email, password} = values;
-          const userCredential = await signInWithEmailAndPassword(auth, email, password);
-          const idToken = await userCredential.user.getIdToken();
-
-          if (!idToken) {
-            toast.error('Sign in failed')
-            return;
-          }
-
-          await signIn({
-            email, idToken
-          })
-
-          toast.success('Sign in successfully.'); 
-          router.push('/dashboard')
+        if (!result?.success) {
+          toast.error(result?.message);
+          return;
         }
-      } catch (error) {
-        console.log(error);
-        toast.error(`There was an error: ${error}`)
-      } finally {
-        setIsSubmitting(false);
-      }
-    }, 1000), // Longer delay for auth operations
-    [type, router, isSubmitting]
-  );
 
-  // Form submission wrapper
+        toast.success('Account created successfully. Please sign in.'); 
+        router.push('/sing-in')
+      } else {
+        const {email, password} = values;
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const idToken = await userCredential.user.getIdToken();
+
+        if (!idToken) {
+          toast.error('Sign in failed')
+          return;
+        }
+
+        await signIn({
+          email, idToken
+        })
+
+        toast.success('Sign in successfully.'); 
+        router.push('/dashboard')
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(`There was an error: ${error}`)
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [type, router, isSubmitting]);
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    debouncedSubmit(values);
+    handleSubmit(values);
   };
 
   const handleGoogleSignIn = async () => {
