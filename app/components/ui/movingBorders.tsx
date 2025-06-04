@@ -10,28 +10,26 @@ import {
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
 
-type ButtonProps<T extends React.ElementType = 'button'> = {
+type ButtonProps = {
   borderRadius?: string;
   children: React.ReactNode;
-  as?: T;
+  as?: React.ElementType;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
-} & React.ComponentPropsWithoutRef<T>;
+} & React.HTMLAttributes<HTMLElement>;
 
-export function Button<T extends React.ElementType = 'button'>({
+export function Button({
   borderRadius = "1.75rem",
   children,
-  as,
+  as: Component = "button",
   containerClassName,
   borderClassName,
   duration,
   className,
   ...otherProps
-}: ButtonProps<T>) {
-  const Component = as || 'button';
-  
+}: ButtonProps) {
   return (
     <Component
       className={cn(
