@@ -289,7 +289,7 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       console.log('Disconnecting call with messages:', messages.length);
       setcallStatus(CallStatus.FINISHED);
       vapi.stop();
-    } catch {
+    } catch (_error) {
       console.error('Error stopping call:');
       // Still set status to finished even if stop fails
       setcallStatus(CallStatus.FINISHED);

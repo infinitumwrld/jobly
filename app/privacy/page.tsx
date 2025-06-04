@@ -49,7 +49,7 @@ const page = () => {
 
             <h2 className='text-2xl font-semibold text-white'>4. AI Data Usage</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
-            As part of using our AI-powered mock interview platform, the data provided during your interviews (e.g., transcripts, responses) may be used by the AI model to generate feedback and assess your performance. We do not share personal information from your mock interviews with third parties for marketing purposes. All data is used strictly to improve the AI model's accuracy and provide feedback to you.
+            As part of using our AI-powered mock interview platform, the data provided during your interviews (e.g., transcripts, responses) may be used by the AI model to generate feedback and assess your performance. We do not share personal information from your mock interviews with third parties for marketing purposes. All data is used strictly to improve the AI model&apos;s accuracy and provide feedback to you.
             </p>
 
             <h2 className='text-2xl font-semibold text-white'>5. Third-Party Services</h2>
@@ -73,7 +73,7 @@ const page = () => {
               You also have the right to object to the processing of your personal data or to withdraw your consent where applicable.
             </p>
 
-            <h2 className='text-2xl font-semibold text-white'>9. Children's Privacy</h2>
+            <h2 className='text-2xl font-semibold text-white'>9. Children&apos;s Privacy</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             Skill Set is not intended for children under the age of 13, and we do not knowingly collect personal information from children. If you believe we have collected data from a child under 13, please contact us immediately, and we will take steps to delete that information.
             </p>

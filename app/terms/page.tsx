@@ -98,23 +98,33 @@ const page = () => {
             Your use of the Service is also governed by our Privacy Policy, which is incorporated into these Terms by reference. By using the Service, you agree to the terms outlined in our Privacy Policy.
             </p>
 
-            <h2 className='text-2xl font-semibold text-white'>10. Limitation of Liability</h2>
+            <h2 className='text-2xl font-semibold text-white'>10. Intellectual Property</h2>
+            <p className="mt-4 text-lg text-white-200 pb-10">
+            All content, features, and functionality of Skill Set, including but not limited to text, graphics, logos, button icons, images, audio clips, digital downloads, data compilations, and software, are the exclusive property of Skill Set, LLC or its licensors and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws.
+            </p>
+
+            <h2 className='text-2xl font-semibold text-white'>11. &quot;As Is&quot; and &quot;As Available&quot; Disclaimer</h2>
+            <p className="mt-4 text-lg text-white-200 pb-10">
+            The Service is provided on an &quot;as is&quot; and &quot;as available&quot; basis. Skill Set makes no representations or warranties of any kind, express or implied, as to the operation of the Service or the information, content, materials, or products included on the Service.
+            </p>
+
+            <h2 className='text-2xl font-semibold text-white'>12. Limitation of Liability</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             To the fullest extent permitted by law, Skill Set, its affiliates, and its employees are not liable for any indirect, incidental, special, or consequential damages, including loss of data, loss of profit, or loss of goodwill, arising from your use of or inability to use the Service.
             </p>
 
-            <h2 className='text-2xl font-semibold text-white'>11. Termination</h2>
+            <h2 className='text-2xl font-semibold text-white'>13. Termination</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             We may suspend or terminate your access to the Service at any time, without notice, for violations of these Terms or for any other reason at our sole discretion. Upon termination, all rights and licenses granted to you under these Terms will cease immediately.
 You can also terminate your account by contacting us directly, and you will lose access to the Service after the termination date.
             </p>
 
-            <h2 className='text-2xl font-semibold text-white'>12. Modification of Terms</h2>
+            <h2 className='text-2xl font-semibold text-white'>14. Modification of Terms</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             We may update or modify these Terms at any time, with or without notice. Any changes will be posted on this page, and the revised Terms will be effective when posted. By continuing to use the Service after changes are posted, you agree to be bound by the updated Terms.
             </p>
 
-            <h2 className='text-2xl font-semibold text-white'>13. Indemnification</h2>
+            <h2 className='text-2xl font-semibold text-white'>15. Indemnification</h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
             <p className="mt-4 text-lg text-white-200 pb-10">
             You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney&apos;s fees, arising out of or related to:
@@ -129,12 +139,12 @@ You can also terminate your account by contacting us directly, and you will lose
             </ul>
             </div>
 
-            <h2 className='text-2xl font-semibold text-white'>14. Governing Law</h2>
+            <h2 className='text-2xl font-semibold text-white'>16. Governing Law</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             These Terms are governed by and construed in accordance with the laws of the state of South Carolina, USA, without regard to its conflict of law principles. Any disputes arising under these Terms shall be subject to the exclusive jurisdiction of the courts located in Greenville County, South Carolina.
             </p>
             
-            <h2 className='text-2xl font-semibold text-white'>15. Dispute Resolution</h2>
+            <h2 className='text-2xl font-semibold text-white'>17. Dispute Resolution</h2>
             <p className="mt-4 text-lg text-white-200 pb-10">
             In the event of a dispute, you agree to first attempt to resolve the matter informally by contacting Skill Set. If the dispute cannot be resolved through informal discussions, it will be submitted to binding arbitration in accordance with the rules of the American Arbitration Association (AAA).
             </p>
