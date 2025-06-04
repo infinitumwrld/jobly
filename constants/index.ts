@@ -461,7 +461,7 @@ export const dummyInterviews: Interview[] = [
         "Customizable packages to fit the institution's needs",
       ],
       icon: "/images/hexagon.svg",
-      logo: "college.png",
+      logo: "/college.png",
     },
   ];
 

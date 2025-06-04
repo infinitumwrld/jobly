@@ -83,8 +83,8 @@ const Page = async () => {
       <>
         <section className='card-cta'>
           <div className='flex flex-col gap-6 max-w-lg'>
-            <h2>Finally — Interview Practice That Actually Works.</h2>
-                        <p className='text-og'>
+                        <h2>Finally &mdash; Interview Practice That Actually Works.</h2>
+            <p className='text-og'>
               Interviews are so good, it feels like talking to a real hiring manager.
             </p>
 

@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import CountUp from "react-countup";
 import { plans } from '@/constants/index'
 import React from 'react'
-import { FaCheck } from "react-icons/fa6";
 import CheckoutButton from "./ui/checkoutButton";
 import Image from 'next/image';
 

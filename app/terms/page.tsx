@@ -117,7 +117,7 @@ You can also terminate your account by contacting us directly, and you will lose
             <h2 className='text-2xl font-semibold text-white'>13. Indemnification</h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
             <p className="mt-4 text-lg text-white-200 pb-10">
-            You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney&rsquo;s fees, arising out of or related to:
+            You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney&apos;s fees, arising out of or related to:
             </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'>Your use of the Service</li>

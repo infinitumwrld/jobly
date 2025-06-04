@@ -12,7 +12,7 @@ const RecentProjects = () => {
     <div className='pt-15 ' id='approach'>
         <h1 className='heading'>
         💡 Why Skill Set Works {' '} <br/>
-            <span className='text-purple-300 '>When Everything Else Doesn't</span>
+            <span className='text-purple-300 '>When Everything Else Doesn&apos;t</span>
         </h1>
         <div className='w-full mt-12 grid lg:grid-cols-4 grid-cols-1 gap-10 pb-5'>
            {workExperience.map((card) => (
