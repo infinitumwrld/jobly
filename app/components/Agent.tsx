@@ -11,7 +11,7 @@ import { auth } from '@/firebase/client';
 import { db } from '@/firebase/client';
 import { toast } from 'sonner';
 import {
-  collection, query, where, orderBy, limit, getDocs, Timestamp, doc, getDoc,
+  collection, query, where, orderBy, limit, getDocs, Timestamp,
 } from 'firebase/firestore';
 import { isAuthenticated } from '@/lib/actions/authaction';
 import { memo } from 'react';
@@ -80,7 +80,7 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
         return false;
       }
       return true;
-    } catch (error) {
+    } catch {
       toast.error('An error occurred while validating interview data');
       return false;
     }
@@ -103,13 +103,13 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       setcallStatus(CallStatus.GENERATING_FEEDBACK);
       setIsGeneratingFeedback(true);
 
-      const { success, feedbackId: id } = await createFeedback({
+      const { success } = await createFeedback({
         interviewId: interviewId!,
         userId: userId!,
         transcript: messages
       });
 
-      if (success && id) {
+      if (success) {
         toast.success('Feedback generated successfully!');
         setIsGeneratingFeedback(false);
         router.push(`/interview/${interviewId}/feedback`);
@@ -121,7 +121,7 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
       return handleGenerateFeedback(messages, retry + 1);
 
-    } catch (error) {
+    } catch {
       if (retry < MAX_FEEDBACK_RETRIES) {
         await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         return handleGenerateFeedback(messages, retry + 1);

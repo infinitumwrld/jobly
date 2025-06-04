@@ -47,10 +47,10 @@ export const getRandomInterviewCover = () => {
 };
 
 // Function to create a debounced version of any function
-export const debounce = <T extends (...args: any[]) => any>(
+export const debounce = <T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number = 500
-) => {
+): (...args: Parameters<T>) => void => {
   let timeout: NodeJS.Timeout;
 
   return function executedFunction(...args: Parameters<T>) {

@@ -2,7 +2,6 @@ import React from 'react'
 import dynamic from 'next/dynamic'
 import Hero from '../components/Hero'
 import { FloatingNav } from '../components/ui/FloatingNav'
-import { FaHome } from 'react-icons/fa'
 import { navItems } from '@/constants'
 
 const LoadingFallback = () => <div className="w-full h-32 animate-pulse bg-gray-900/50 rounded-lg" />

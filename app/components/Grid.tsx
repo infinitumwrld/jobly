@@ -17,7 +17,7 @@ const Grid = () => {
         5 Reasons Skill Set {' '}
         <span className='text-purple-300'>Will Get You Hired </span>
       </h1>
-      <p className='text-white text-center text-2xl pt-5'> This isn't another bullsh*t cheat tool </p>
+      <p className='text-white text-center text-2xl pt-5'> This isn&apos;t another bullsh*t cheat tool </p>
       <BentoGrid className='w-full py-15'>
         {gridItems.map(({ id, title, description, className, img, imgClassName, titleClassName, spareImg }) => (
           <Suspense key={id} fallback={<GridItemFallback />}>

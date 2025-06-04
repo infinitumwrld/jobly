@@ -10,7 +10,7 @@ interface InterviewCardProps extends Interview {
   feedback?: Feedback | null;
 }
  
-const InterviewCard = ({ id, userId, role, type, techstack, createdAt, feedback }: InterviewCardProps) => {
+const InterviewCard = ({ id, role, type, techstack, createdAt, feedback }: InterviewCardProps) => {
   const normalizedType = /mix/gi.test(type) ? 'Mixed' : type;
   const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D,YYYY'); 
   

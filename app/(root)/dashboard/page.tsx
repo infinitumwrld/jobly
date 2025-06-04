@@ -20,8 +20,8 @@ const InterviewsList = async ({
   interviews, 
   feedbackMap 
 }: { 
-  interviews: any[], 
-  feedbackMap: Record<string, any> 
+  interviews: Interview[], 
+  feedbackMap: Record<string, Feedback> 
 }) => {
   if (!interviews?.length) {
     return <p>No interviews available</p>;

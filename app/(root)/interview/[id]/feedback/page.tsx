@@ -10,13 +10,14 @@ import React from 'react'
 const page = async ({ params }: RouteParams) => {
   const { id } = await params;
   const user = await getCurrentUser()
+  if (!user?.id) redirect('/sign-in');
 
   const interview = await getInterviewById(id);
   if(!interview) redirect('/dashboard');
 
   const feedback = await getFeedbackByInterviewId ({
     interviewId: id,
-    userId: user?.id!,
+    userId: user.id,
   })
 
   return (

@@ -6,9 +6,8 @@ import { z } from "zod"
 import Image from "next/image";
 import { Button } from "@/app/components/ui/button"
 import { Form } from "@/app/components/ui/form"
-import { Input } from "@/app/components/ui/input"
 import Link from "next/link";
-import { toast, Toaster } from "sonner";
+import { toast } from "sonner";
 import FormField from "./FormField";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";

@@ -3,6 +3,7 @@
 import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 import { cache } from 'react';
+import { DocumentData } from 'firebase-admin/firestore';
 
 const ONE_WEEK = 60 * 60 * 24 * 7;
 const SESSION_CACHE_TIME = 5 * 60 * 1000; // 5 minutes
@@ -10,18 +11,18 @@ const SESSION_CACHE_TIME = 5 * 60 * 1000; // 5 minutes
 // Secure cache implementation
 class SecureCache {
     private static cache = new Map<string, { 
-        data: any; 
+        data: DocumentData; 
         timestamp: number;
     }>();
 
-    static set(key: string, data: any) {
+    static set(key: string, data: DocumentData) {
         this.cache.set(key, {
             data,
             timestamp: Date.now()
         });
     }
 
-    static get(key: string) {
+    static get(key: string): DocumentData | null {
         const entry = this.cache.get(key);
         if (!entry) return null;
 
@@ -84,7 +85,12 @@ export const getCurrentUser = cache(async (): Promise<User | null> => {
         }
 
         // Update cache
-        const userData = userRecord.data();
+        const userData = userRecord.data() as DocumentData;
+        if (!userData) {
+            SecureCache.clear(uid);
+            return null;
+        }
+
         SecureCache.set(uid, userData);
 
         return {
@@ -126,11 +132,11 @@ export async function signUp(params: SignUpParams) {
             };
         });
 
-    } catch (e: any) {
-        console.error('Error creating user:', e);
+    } catch (error: unknown) {
+        console.error('Error creating user:', error);
         SecureCache.clear(uid);
 
-        if (e.code === 'auth/email-already-exists') {
+        if (error instanceof Error && 'code' in error && error.code === 'auth/email-already-exists') {
             return {
                 success: false,
                 message: 'This email is already in use. Please sign in instead.'
