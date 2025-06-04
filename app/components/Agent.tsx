@@ -16,6 +16,7 @@ import {
 import { isAuthenticated } from '@/lib/actions/authaction';
 import { memo } from 'react';
 
+
 // Memoize static components
 const Avatar = memo(function Avatar({ isSpeaking }: { isSpeaking: boolean }) {
   return (
@@ -69,17 +70,20 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
   const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
 
   const validateInterviewData = useCallback(() => {
-    if (!userId || !interviewId) {
-      console.error('Missing required data:', { userId, interviewId });
-      toast.error('Missing required interview data. Please try again.');
+    try {
+      if (!userId || !interviewId) {
+        toast.error('Missing required interview data. Please try again.');
+        return false;
+      }
+      if (!messages || messages.length < MIN_MESSAGES_FOR_FEEDBACK) {
+        toast.error('Interview was too short. Please try again.');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      toast.error('An error occurred while validating interview data');
       return false;
     }
-    if (!messages || messages.length < MIN_MESSAGES_FOR_FEEDBACK) {
-      console.error('Not enough messages for feedback:', messages?.length);
-      toast.error('Interview was too short. Please try again.');
-      return false;
-    }
-    return true;
   }, [userId, interviewId, messages]);
 
   const handleGenerateFeedback = useCallback(async (messages: SavedMessage[], retry = 0): Promise<boolean> => {
@@ -118,11 +122,7 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       return handleGenerateFeedback(messages, retry + 1);
 
     } catch (error) {
-      console.error('Error generating feedback:', error);
-      
-      // If it's a network error or temporary issue, retry
       if (retry < MAX_FEEDBACK_RETRIES) {
-        console.log('Retrying after error...');
         await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
         return handleGenerateFeedback(messages, retry + 1);
       }
@@ -240,7 +240,6 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       // Trial is active
       return true;
     } catch (error) {
-      console.error('Error checking access:', error);
       toast.error("Error verifying access. Please try again.");
       return false;
     }
@@ -285,17 +284,17 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
     }
   }
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = useCallback(() => {
     try {
       console.log('Disconnecting call with messages:', messages.length);
       setcallStatus(CallStatus.FINISHED);
-      await vapi.stop();
+      vapi.stop();
     } catch (error) {
       console.error('Error stopping call:', error);
       // Still set status to finished even if stop fails
       setcallStatus(CallStatus.FINISHED);
     }
-  }
+  }, [messages.length]);
 
   const latestMessage = useMemo(() => 
     messages[messages.length - 1]?.content,
@@ -355,4 +354,4 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
   );
 });
 
-export default Agent;
+export default memo(Agent);

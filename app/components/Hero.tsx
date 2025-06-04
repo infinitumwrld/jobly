@@ -65,12 +65,12 @@ const Hero = () => {
  
         <div className='flex justify-center relative my-20 z-10 pb-15'>
             <div className='max-w-[89vw] md:max-w-2xl lg:max-w-[60vw] flex flex-col items-center'>
-                <p className='badge font-bold uppercase tracking-widest text-xs'>
-                  F*ck cheat tools. Get hired for real.
-                  <span></span>
+                <p className='badge font-bold uppercase tracking-widest text-xs mb-10'>
+                Interview like a top 1% candidate                  
+                <span></span>
                 </p>
 
-                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl mb-3' words='Interview like a top 1% candidate. AI coaching built for landing elite tech roles.' />
+                <TextGenerateEffect className='text-center text-[36px] md:text-5xl lg:text-6xl mb-3' words='AI coaching built for landing elite tech roles.' />
 
                 <p className='text-center md:tracking-wider text-sm md:text-lg lg:text-2xl lg:mb-5 mb-5'>
                     SkillSet simulates realistic interviews from FAANG-level companies.
