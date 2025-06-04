@@ -5,13 +5,14 @@ import React from 'react'
 import { Button } from './ui/movingBorders';
 import MagicButton from './ui/MagicButton';
 import { FaLocationArrow } from 'react-icons/fa6';
+import Image from 'next/image';
 
 const RecentProjects = () => {
   return (
     <div className='pt-15 ' id='approach'>
         <h1 className='heading'>
         💡 Why Skill Set Works {' '} <br/>
-            <span className='text-purple-300 '>When Everything Else Doesn’t</span>
+            <span className='text-purple-300 '>When Everything Else Doesn't</span>
         </h1>
         <div className='w-full mt-12 grid lg:grid-cols-4 grid-cols-1 gap-10 pb-5'>
            {workExperience.map((card) => (
@@ -23,7 +24,13 @@ const RecentProjects = () => {
               
             >
               <div className='flex lg:flex-row flex-col lg:items-center p-3 py-6 md:p-5 lg:p-10 gap-2 mt-5'>
-                <img src={card.thumbnail} alt={card.thumbnail} className='lg:w-32 md:w-20 w-16'/>
+                <Image 
+                  src={card.thumbnail} 
+                  alt={card.title} 
+                  width={300}
+                  height={200}
+                  className="w-full h-48 object-cover rounded-lg"
+                />
               </div>
               <div className='lg:ms-5'>
                 <h1 className='text-start text-xl md:text-2xl font-bold'>

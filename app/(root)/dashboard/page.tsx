@@ -85,7 +85,7 @@ const Page = async () => {
           <div className='flex flex-col gap-6 max-w-lg'>
             <h2>Finally — Interview Practice That Actually Works.</h2>
             <p className='text-og'>
-              Interviews are so good, it feels like talking to a real hiring manager. 
+                            Interviews are so good, it feels like talking to a real hiring manager.
             </p>
 
             <Button asChild className='btn-primary max-sm:w-full premium-shake'>

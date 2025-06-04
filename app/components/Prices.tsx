@@ -7,6 +7,7 @@ import { plans } from '@/constants/index'
 import React from 'react'
 import { FaCheck } from "react-icons/fa6";
 import CheckoutButton from "./ui/checkoutButton";
+import Image from 'next/image';
 
 const Prices = () => {
   const [monthly, setMonthly] = useState(true);
@@ -77,9 +78,11 @@ const Prices = () => {
 
               {/* Plan Header */}
               <div className="text-center mb-8">
-                <img
+                <Image 
                   src={plan.logo}
                   alt={plan.title}
+                  width={64}
+                  height={64}
                   className="mx-auto mb-4 h-16 w-16 object-contain drop-shadow-2xl"
                 />
                 <h3 className="heading-3 mb-2 text-white">{plan.title}</h3>
@@ -106,7 +109,13 @@ const Prices = () => {
               <ul className="space-y-4 mb-8">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-3 text-white/80">
-                    <FaCheck className="text-indigo-400 flex-shrink-0" />
+                    <Image 
+                      src="/check.svg" 
+                      alt="check" 
+                      width={20} 
+                      height={20}
+                      className="w-5 h-5"
+                    />
                     <span className="text-sm font-light">{feature}</span>
                   </li>
                 ))}

@@ -9,7 +9,7 @@ const page = () => {
         </h1>
         <div className='text-white-200 md:mt-10 my-5 text-center '>
             <p className='font-bold pb-5'> Effective Date: April 20, 2025</p>  
-            Skill Set, LLC ("we," "us," "our") is committed to protecting your privacy and ensuring a secure user experience. This Privacy Policy outlines how we collect, use, and protect your information when you use Skill Set, an AI-powered mock interview platform.  <span className='font-bold'> By accessing or using the Service, you agree to the collection and use of your information in accordance with this policy. </span>
+            Skill Set, LLC (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is committed to protecting your privacy and ensuring a secure user experience. This Privacy Policy outlines how we collect, use, and protect your information when you use Skill Set, an AI-powered mock interview platform.  <span className='font-bold'> By accessing or using the Service, you agree to the collection and use of your information in accordance with this policy. </span>
         </div>
         <div className="pt-10 max-w-3xl mx-auto flex flex-col ">
             <h2 className='text-2xl font-semibold text-white'> 1. Information We Collect </h2>

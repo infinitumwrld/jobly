@@ -137,9 +137,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
       toast.success('Signed in successfully with Google');
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error: Error | unknown) {
       console.error('Google sign in error:', error);
-      toast.error(error?.message || 'Failed to sign in with Google');
+      if (error instanceof Error) {
+        toast.error(error.message || 'Failed to sign in with Google');
+      } else {
+        toast.error('Failed to sign in with Google');
+      }
     } finally {
       setIsSubmitting(false);
     }

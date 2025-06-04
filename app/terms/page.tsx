@@ -9,7 +9,7 @@ const page = () => {
         </h1>
         <div className='text-white-200 md:mt-10 my-5 text-center '>
             <p className='font-bold pb-5'> Effective Date: April 20, 2025</p>  
-             Welcome to Skill Set, These Terms of Service (“Terms”) govern your access to and use of Skill Set’s services (the “Service”), provided by Skill Set, LLC ("we," "us," or "our"). Please read these Terms carefully before using the Service. By using or accessing the Service, you agree to comply with and be bound by these Terms. <span className='font-bold'>If you do not agree to these Terms, you are not authorized to use the Service. </span>
+             Welcome to Skill Set, These Terms of Service (&quot;Terms&quot;) govern your access to and use of Skill Set&apos;s services (the &quot;Service&quot;), provided by Skill Set, LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;). Please read these Terms carefully before using the Service. By using or accessing the Service, you agree to comply with and be bound by these Terms. <span className='font-bold'>If you do not agree to these Terms, you are not authorized to use the Service. </span>
         </div>
         <div className="pt-10 max-w-3xl mx-auto flex flex-col ">
             <h2 className='text-2xl font-semibold text-white'> 1. Acceptance of Terms </h2>
@@ -117,7 +117,7 @@ You can also terminate your account by contacting us directly, and you will lose
             <h2 className='text-2xl font-semibold text-white'>13. Indemnification</h2>
             <div className="mt-4 text-lg text-white-200 pb-10">
             <p className="mt-4 text-lg text-white-200 pb-10">
-            You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney’s fees, arising out of or related to:
+            You agree to indemnify, defend, and hold harmless Skill Set, its officers, employees, agents, and affiliates from any claim, demand, loss, liability, damages, or costs, including reasonable attorney&rsquo;s fees, arising out of or related to:
             </p>
             <ul className="list-disc pl-6 list-inside pt-5">
                <li className=' text-lg font-semibold pr-5'>Your use of the Service</li>

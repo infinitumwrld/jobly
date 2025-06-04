@@ -6,6 +6,7 @@ import { BackgroundGradientAnimation } from "./GradientBg";
 import { FaLocationArrow } from "react-icons/fa6";
 import MagicButton from "./MagicButton";
 import { GlobeDemo } from "./GridGlobe";
+import Image from 'next/image';
 
 export const BentoGrid = ({
   className,
@@ -92,21 +93,23 @@ export const BentoGridItem = ({
           <>
             <div className="w-full h-full absolute">
               {img && (
-                <img
-                  src={img}
-                  alt={img}
+                <Image 
+                  src={img} 
+                  alt={img} 
+                  width={300}
+                  height={200}
                   className={cn(imgClassName, "object-cover object-center")}
-                  loading="lazy"
                 />
               )}
             </div>
             <div className={`absolute right-0 -bottom-5 ${id === 5 && "w-full opacity-80"}`}>
               {spareImg && (
-                <img
-                  src={spareImg}
-                  alt={spareImg}
+                <Image 
+                  src={spareImg} 
+                  alt={spareImg} 
+                  width={300}
+                  height={200}
                   className="object-cover object-center w-full h-full"
-                  loading="lazy"
                 />
               )}
             </div>
