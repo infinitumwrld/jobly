@@ -12,13 +12,13 @@ import { cn } from "@/lib/utils";
 
 type ButtonProps = {
   borderRadius?: string;
-  children: React.ReactNode;
-  as?: React.ElementType;
+  children?: React.ReactNode;
+  as?: any;
   containerClassName?: string;
   borderClassName?: string;
   duration?: number;
   className?: string;
-} & React.HTMLAttributes<HTMLElement>;
+};
 
 export function Button({
   borderRadius = "1.75rem",
