@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 import React from 'react'
 
 interface PageProps {
-  params: Promise<{ id: string }> | { id: string }
+  params: Promise<{ id: string }>
 }
 
 const page = async ({ params }: PageProps) => {
