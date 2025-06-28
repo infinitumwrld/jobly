@@ -4,6 +4,7 @@ import { auth, db } from "@/firebase/admin";
 import { cookies } from "next/headers";
 import { cache } from 'react';
 import { DocumentData } from 'firebase-admin/firestore';
+import type { User, SignUpParams, SignInParams } from '@/types';
 
 const ONE_WEEK = 60 * 60 * 24 * 7;
 const SESSION_CACHE_TIME = 5 * 60 * 1000; // 5 minutes

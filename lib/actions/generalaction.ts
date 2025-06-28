@@ -4,45 +4,65 @@ import { feedbackSchema } from "@/constants";
 import { db } from "@/firebase/admin";
 import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
+import type { Interview, Feedback, CategoryScore } from '@/types';
 
-export async function getInterviewsByUserId(userId: string): Promise<Interview[] | null> {
-    const interviews = await db
-    .collection('interviews')
-    .where('userId', '==', userId)
-    .orderBy('createdAt', 'desc') 
-    .get();
-
-    return interviews.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    })) as Interview[];
+interface GetLatestInterviewsParams {
+    userId: string;
+    limit?: number;
 }
 
-export async function getLatestInterviews(params: GetLatestInterviewsParams): Promise<Interview[] | null> {
-    
-    const { userId, limit = 20 } = params;
-    
-    const interviews = await db
-    .collection('interviews')
-    .orderBy('createdAt', 'desc') 
-    .where('finalized', '==', true)
-    .where('userId', '!=', userId )
-    .limit(limit)
-    .get();
-
-    return interviews.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    })) as Interview[];
+interface CreateFeedbackParams {
+    interviewId: string;
+    userId: string;
+    transcript: { role: string; content: string }[];
 }
+
+interface GetFeedbackByInterviewIdParams {
+    interviewId: string;
+    userId: string;
+}
+
+
+export async function getInterviewsByUserId(
+    userId: string
+  ): Promise<Interview[] | null> {
+    const interviews = await db
+      .collection("interviews")
+      .where("userId", "==", userId)
+      .orderBy("createdAt", "desc")
+      .get();
+  
+    return interviews.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Interview[];
+  }
+
+  export async function getLatestInterviews(
+    { userId, limit = 20 }: GetLatestInterviewsParams
+  ): Promise<Interview[] | null> {
+    const snapshot = await db
+      .collection("interviews")
+      .where("finalized", "==", true)   // equality first
+      .where("userId", "!=", userId)    // inequality
+      .orderBy("userId")                // MUST match inequality field
+      .orderBy("createdAt", "desc")     // secondary sort
+      .limit(limit)
+      .get();
+  
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Interview[];
+  }
 
 export async function getInterviewById(id: string): Promise<Interview | null> {
     const interview = await db
-    .collection('interviews')
-    .doc(id)
-    .get()
+      .collection("interviews")
+      .doc(id)
+      .get();
 
-    return interview.data() as Interview | null
+    return interview.data() as Interview | null;
 }
 
 export async function createFeedback(params: CreateFeedbackParams){
@@ -61,7 +81,7 @@ export async function createFeedback(params: CreateFeedbackParams){
                 }),
                 schema: feedbackSchema, 
                 prompt: `
-                 You are an AI interviewer analyzing a realistic interview. Your task is to evaluate the candidate's performance based on structured categories. Speak directly to them using second-person language ("you"). Be thorough, detailed, and provide actionable feedback. If there are mistakes or areas for improvement, make sure to point them out, but always provide actionable advice. Don't be lenient. Remember, your feedback should be clear and easy to understand so they can improve their performance.
+                 You are an AI interviewer analyzing a computer science realistic interview. Your task is to evaluate the candidate's performance based on structured categories. Speak directly to them using second-person language ("you"). Be thorough, detailed, and provide actionable feedback. If there are mistakes or areas for improvement, make sure to point them out, but always provide actionable advice. Don't be lenient. Remember, your feedback should be clear and easy to understand so they can improve their performance.
         Transcript:
         ${formattedTranscript}
 
@@ -190,4 +210,54 @@ export async function getFeedbackByInterviewIds(params: { interviewIds: string[]
     });
 
     return feedbackMap;
+}
+
+export async function deleteInterview({ interviewId }: { interviewId: string }): Promise<{ success: boolean }> {
+    try {
+        await db.collection('interviews').doc(interviewId).delete();
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting interview:', error);
+        return { success: false };
+    }
+}
+
+export async function duplicateInterview(params: { role: string; type: string; techstack: string[]; userId: string }): Promise<{ success: boolean; interviewId?: string }> {
+    try {
+        const { role, type, techstack, userId } = params;
+        const interview = await db.collection('interviews').add({
+            role,
+            type,
+            techstack,
+            userId,
+            createdAt: new Date().toISOString()
+        });
+
+        return {
+            success: true,
+            interviewId: interview.id
+        };
+    } catch (error) {
+        console.error('Error duplicating interview:', error);
+        return { success: false };
+    }
+}
+
+export async function generatePDF({ interview, feedback }: { 
+    interview: { id: string; role: string; type: string; techstack: string[]; createdAt: string }; 
+    feedback: any 
+}): Promise<{ success: boolean; data?: any }> {
+    try {
+        // Return the data needed for PDF generation
+        return { 
+            success: true, 
+            data: {
+                interview,
+                feedback
+            }
+        };
+    } catch (error) {
+        console.error('Error preparing PDF data:', error);
+        return { success: false };
+    }
 }

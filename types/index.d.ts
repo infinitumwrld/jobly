@@ -1,12 +1,17 @@
-interface Feedback {
+export interface CategoryScore {
+  name: string;
+  score: number;
+  comment: string;
+}
+
+export interface Feedback {
   id: string;
   interviewId: string;
+  userId: string;
   totalScore: number;
-  categoryScores: Array<{
-    name: string;
-    score: number;
-    comment: string;
-  }>;
+  categoryScores: CategoryScore[];
+  scores: Record<string, number>;
+  comments: Record<string, string>;
   strengths: string[];
   areasForImprovement: string[];
   finalAssessment: string;
@@ -25,14 +30,14 @@ interface Interview {
   finalized: boolean;
 }
 
-interface CreateFeedbackParams {
+export interface CreateFeedbackParams {
   interviewId: string;
   userId: string;
   transcript: { role: string; content: string }[];
   feedbackId?: string;
 }
 
-interface User {
+export interface User {
   name: string;
   email: string;
   id: string;
@@ -61,7 +66,7 @@ interface RouteParams {
   searchParams: Promise<Record<string, string>>;
 }
 
-interface GetFeedbackByInterviewIdParams {
+export interface GetFeedbackByInterviewIdParams {
   interviewId: string;
   userId: string;
 }

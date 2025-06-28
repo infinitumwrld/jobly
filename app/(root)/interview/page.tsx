@@ -5,14 +5,13 @@ import { redirect } from 'next/navigation'
 
 const page = async () => {
   const user = await getCurrentUser();
-  if (!user?.id || !user?.name) redirect('/sign-in');
+  if (!user?.id || !user?.name) redirect('/sing-in');
 
   return (
     <>
-      <h3>Interview Generation</h3>
+      <h3 className="mb-8">Interview Generation</h3>
       <Agent userName={user.name} userId={user.id} type="generate" />
     </>
   )
 }
-
 export default page

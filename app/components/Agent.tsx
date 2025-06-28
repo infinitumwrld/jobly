@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image'
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, memo } from 'react'
 import { vapi } from '@/lib/vapi.sdk';
 import { interviewer } from '@/constants';
 import { createFeedback } from '@/lib/actions/generalaction';
@@ -14,32 +14,73 @@ import {
   collection, query, where, orderBy, limit, getDocs, Timestamp,
 } from 'firebase/firestore';
 import { isAuthenticated } from '@/lib/actions/authaction';
-import { memo } from 'react';
 
+interface AgentProps {
+  userName: string;
+  userId?: string;
+  interviewId?: string;
+  type: 'interview' | 'generate';
+  questions?: string[];
+}
+
+interface SavedMessage {
+  role: 'user' | 'system' | 'assistant';
+  content: string;
+}
 
 // Memoize static components
 const Avatar = memo(function Avatar({ isSpeaking }: { isSpeaking: boolean }) {
   return (
-    <div className='avatar'>
-      <Image src="/ai-avatar.png" alt="vapi" width={65} height={54} className='object-cover' />
-      {isSpeaking && <span className='animate-speak' />}              
+    <div className='avatar-container'>
+      <div className='avatar'>
+        <Image src="/aivoice.png" alt="vapi" width={65} height={54} className='object-cover' />
+      </div>
+      <div className={cn('audio-visualizer', isSpeaking && 'active')}>
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className='bar' />
+        ))}
+      </div>
     </div>
   );
 });
 
-const UserAvatar = memo(function UserAvatar({ userName }: { userName: string }) {
+const UserAvatar = memo(function UserAvatar({
+  userName,
+  isSpeaking,
+  photoURL,
+  callStatus
+}: {
+  userName: string,
+  isSpeaking: boolean,
+  photoURL?: string,
+  callStatus: CallStatus
+}) {
   return (
     <div className='card-content'>
-      <Image 
-        src='/user-avatar.png' 
-        alt='user avatar' 
-        width={540} 
-        height={540} 
-        className='rounded-full object-cover size-[120px]'
-        priority={false}
-        loading="lazy"
-      /> 
+      <div className='avatar-container'>
+        <div className='avatar'>
+          <Image
+            src={photoURL || '/user-avatar.png'}
+            alt={`${userName}'s avatar`}
+            width={120}
+            height={120}
+            className='rounded-full object-cover size-[120px]'
+            priority={true}
+            loading="eager"
+          />
+        </div>
+        <div className={cn('audio-visualizer', isSpeaking && 'active')}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className='bar' />
+          ))}
+        </div>
+      </div>
       <h3>{userName}</h3>
+      {callStatus === CallStatus.ACTIVE && (
+        <div className='speaking-indicator'>
+          {isSpeaking ? 'Speaking...' : 'Listening...'}
+        </div>
+      )}
     </div>
   );
 });
@@ -52,38 +93,39 @@ enum CallStatus {
   GENERATING_FEEDBACK = 'GENERATING_FEEDBACK',
 }
 
-interface SavedMessage {
-  role: 'user' | 'system' | 'assistant'
-  content: string;
-}
-
-const MIN_MESSAGES_FOR_FEEDBACK = 4; // Minimum number of messages to consider it a valid interview
+const MIN_MESSAGES_FOR_FEEDBACK = 4;
 const MAX_FEEDBACK_RETRIES = 3;
-const RETRY_DELAY = 2000; // 2 seconds
-const TRIAL_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+const RETRY_DELAY = 2000;
+const TRIAL_DURATION = 24 * 60 * 60 * 1000;
 
 const Agent = memo(function Agent({ userName, userId, type, interviewId, questions }: AgentProps) {
+
+
   const router = useRouter();
-  const [isSpeaking, setIsSpeaking] = useState(false)
-  const [callStatus, setcallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
   const [isGeneratingFeedback, setIsGeneratingFeedback] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [photoURL, setPhotoURL] = useState<string>();
+  const [isPushToTalkActive, setIsPushToTalkActive] = useState(false);
+  const [currentTranscript, setCurrentTranscript] = useState('');
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user?.photoURL) {
+        setPhotoURL(user.photoURL);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const validateInterviewData = useCallback(() => {
-    try {
-      if (!userId || !interviewId) {
-        toast.error('Missing required interview data. Please try again.');
-        return false;
-      }
-      if (!messages || messages.length < MIN_MESSAGES_FOR_FEEDBACK) {
-        toast.error('Interview was too short. Please try again.');
-        return false;
-      }
-      return true;
-    } catch {
-      toast.error('An error occurred while validating interview data');
-      return false;
-    }
+    if (!userId || !interviewId) return false;
+    if (!messages || messages.length < MIN_MESSAGES_FOR_FEEDBACK) return false;
+    return true;
   }, [userId, interviewId, messages]);
 
   const handleGenerateFeedback = useCallback(async (messages: SavedMessage[], retry = 0): Promise<boolean> => {
@@ -93,14 +135,19 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
       return false;
     }
 
-    if (!validateInterviewData()) {
+    const isValid = validateInterviewData();
+    if (!isValid) {
+      if (!userId || !interviewId) {
+        toast.error('Missing required interview data. Please try again.');
+      } else {
+        toast.error('Interview was too short. Please try again.');
+      }
       setIsGeneratingFeedback(false);
       return false;
     }
 
     try {
-      console.log('Generating feedback, attempt:', retry + 1);
-      setcallStatus(CallStatus.GENERATING_FEEDBACK);
+      setCallStatus(CallStatus.GENERATING_FEEDBACK);
       setIsGeneratingFeedback(true);
 
       const { success } = await createFeedback({
@@ -114,10 +161,8 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
         setIsGeneratingFeedback(false);
         router.push(`/interview/${interviewId}/feedback`);
         return true;
-      } 
+      }
 
-      // If not successful, retry after delay
-      console.log('Feedback generation not successful, retrying...');
       await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
       return handleGenerateFeedback(messages, retry + 1);
 
@@ -133,70 +178,6 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
     }
   }, [interviewId, userId, router, validateInterviewData]);
 
-  useEffect(() => {
-    const onCallStart = () => {
-      setcallStatus(CallStatus.ACTIVE);
-      setIsGeneratingFeedback(false); // Reset feedback state on new call
-    };
-    
-    const onCallEnd = () => {
-      setcallStatus(CallStatus.FINISHED);
-      console.log('Call ended with messages:', messages.length);
-    };
-
-    const onMessage = (message: Message) => {
-      if(message.type === 'transcript' && message.transcriptType === 'final') {
-        const newMessage = { role: message.role, content: message.transcript } 
-        console.log('New message:', newMessage);
-        setMessages((prev) => [...prev, newMessage]);
-      }
-    }
-
-    const onSpeechStart = () => setIsSpeaking(true);
-    const onSpeechEnd = () => setIsSpeaking(false);
-
-    const onError = (error: Error) => {
-      console.error('Call error:', error);
-      toast.error('There was an error with the interview. Please try again.');
-      setIsGeneratingFeedback(false);
-    }
-
-    vapi.on('call-start', onCallStart);
-    vapi.on('call-end', onCallEnd);
-    vapi.on('message', onMessage);
-    vapi.on('speech-start', onSpeechStart);
-    vapi.on('speech-end', onSpeechEnd);
-    vapi.on('error', onError);
-
-    return () => { 
-      vapi.off('call-start', onCallStart);
-      vapi.off('call-end', onCallEnd);
-      vapi.off('message', onMessage);
-      vapi.off('speech-start', onSpeechStart);
-      vapi.off('speech-end', onSpeechEnd);
-      vapi.off('error', onError);
-    }
-  }, [messages.length])
-
-  useEffect(() => {
-    const generateFeedbackIfNeeded = async () => {
-      // Only generate feedback for actual interviews (not generation)
-      if (callStatus === CallStatus.FINISHED && type !== 'generate' && messages.length > 0) {
-        console.log('Attempting to generate feedback for interview:', interviewId);
-        const success = await handleGenerateFeedback(messages);
-        if (!success) {
-          console.log('Feedback generation failed, redirecting to dashboard');
-          setIsGeneratingFeedback(false);
-          router.push('/dashboard');
-        }
-      } else if (callStatus === CallStatus.FINISHED && type === 'generate') {
-        router.push('/dashboard');
-      }
-    };
-
-    generateFeedbackIfNeeded();
-  }, [callStatus, type, messages, handleGenerateFeedback, router, interviewId]);
-
   const checkAccessStatus = useCallback(async () => {
     try {
       const isAuth = await isAuthenticated();
@@ -206,16 +187,13 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
         return false;
       }
 
-      // Get fresh token & claims
       const { claims } = await auth.currentUser.getIdTokenResult(true);
       const role = claims.stripeRole as string | undefined;
 
-      // If user has Pro or Premium subscription, they have access
       if (role === 'Pro' || role === 'Premium') {
         return true;
       }
 
-      // Check for active trial payment
       const since = Date.now() - TRIAL_DURATION;
       const uid = auth.currentUser.uid;
       const paymentsRef = collection(db, 'users', uid, 'payments');
@@ -237,7 +215,6 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
         return false;
       }
 
-      // Trial is active
       return true;
     } catch (error) {
       toast.error("Error verifying access. Please try again.");
@@ -247,8 +224,7 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
 
   const handleCall = async () => {
     try {
-      setcallStatus(CallStatus.CONNECTING);
-      setMessages([]); // Clear any previous messages
+      setCallStatus(CallStatus.CONNECTING);
       setIsGeneratingFeedback(false);
 
       // Verify access before starting
@@ -279,56 +255,224 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
     } catch (error) {
       console.error('Error starting call:', error);
       toast.error('Failed to start the interview. Please try again.');
-      setcallStatus(CallStatus.INACTIVE);
+      setCallStatus(CallStatus.INACTIVE);
       setIsGeneratingFeedback(false);
     }
   }
 
   const handleDisconnect = useCallback(() => {
     try {
-      console.log('Disconnecting call with messages:', messages.length);
-      setcallStatus(CallStatus.FINISHED);
-      vapi.stop();
+      if (vapi) {
+        setCallStatus(CallStatus.FINISHED);
+        vapi.stop();
+      }
     } catch (error) {
-      console.error('Error stopping call:');
-      // Still set status to finished even if stop fails
-      setcallStatus(CallStatus.FINISHED);
+      console.error('Error during disconnect:', error);
+      // Still set status to finished even if there's an error
+      setCallStatus(CallStatus.FINISHED);
     }
-  }, [messages.length]);
+  }, []);
 
-  const latestMessage = useMemo(() => 
-    messages[messages.length - 1]?.content,
-    [messages]
-  );
-  
-  const isCallInactiveOrFinished = useMemo(() => 
+  const isCallInactiveOrFinished = useMemo(() =>
     callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED,
     [callStatus]
   );
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (callStatus === CallStatus.ACTIVE) {
+      interval = setInterval(() => {
+        setDuration(prev => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [callStatus]);
+
+  const formattedDuration = useMemo(() => {
+    const minutes = Math.floor(duration / 60);
+    const seconds = duration % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }, [duration]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (callStatus !== CallStatus.ACTIVE) return;
+
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key === 'm' || e.key === 'M') {
+        e.preventDefault();
+        setIsMuted(prev => !prev);
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPushToTalkActive(true);
+        setIsMuted(false);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPushToTalkActive(false);
+        setIsMuted(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [callStatus]);
+
+  useEffect(() => {
+    if (callStatus === CallStatus.ACTIVE) {
+      vapi.setMuted(isMuted && !isPushToTalkActive);
+    }
+  }, [isMuted, isPushToTalkActive, callStatus]);
+
+  useEffect(() => {
+    const onCallStart = () => {
+      setCallStatus(CallStatus.ACTIVE);
+      setIsGeneratingFeedback(false);
+      setCurrentTranscript('');
+    };
+
+    const onCallEnd = () => {
+      setCallStatus(CallStatus.FINISHED);
+      setCurrentTranscript('');
+      if (type === 'generate') {
+        toast.success('Interview has been generated successfully! Redirecting to dashboard...');
+      }
+    };
+
+    const onMessage = (message: Message) => {
+      if (message.type === 'transcript') {
+        const newMessage = { role: message.role, content: message.transcript };
+        setMessages(prev => [...prev, newMessage]);
+        setCurrentTranscript(message.transcript);
+      }
+    };
+
+    const onSpeechStart = () => setIsSpeaking(true);
+    const onSpeechEnd = () => setIsSpeaking(false);
+
+    const onError = (error: Error) => {
+      // Handle normal meeting end
+      if (error.message?.includes('ejection') || 
+          (error as any)?.errorMsg?.includes('Meeting has ended')) {
+        setCallStatus(CallStatus.FINISHED);
+        if (type === 'generate') {
+          toast.success('Interview has been generated successfully! Redirecting to dashboard...');
+        }
+        return;
+      }
+
+      // Handle actual errors
+      console.error('Call error:', error);
+      if (callStatus !== CallStatus.FINISHED) {
+        toast.error('There was an error with the interview. Please try again.');
+        setIsGeneratingFeedback(false);
+        setCallStatus(CallStatus.INACTIVE);
+        setCurrentTranscript('');
+        setMessages([]);
+      }
+    };
+
+    vapi.on('call-start', onCallStart);
+    vapi.on('call-end', onCallEnd);
+    vapi.on('message', onMessage);
+    vapi.on('speech-start', onSpeechStart);
+    vapi.on('speech-end', onSpeechEnd);
+    vapi.on('error', onError);
+
+    // Cleanup function
+    return () => {
+      if (vapi) {
+        try {
+          vapi.off('call-start', onCallStart);
+          vapi.off('call-end', onCallEnd);
+          vapi.off('message', onMessage);
+          vapi.off('speech-start', onSpeechStart);
+          vapi.off('speech-end', onSpeechEnd);
+          vapi.off('error', onError);
+        } catch (error) {
+          console.error('Error cleaning up event listeners:', error);
+        }
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const generateFeedbackIfNeeded = async () => {
+      if (callStatus === CallStatus.FINISHED && type !== 'generate' && messages.length > 0) {
+        const success = await handleGenerateFeedback(messages);
+        if (!success) {
+          setIsGeneratingFeedback(false);
+          router.push('/dashboard');
+        }
+      } else if (callStatus === CallStatus.FINISHED && type === 'generate') {
+        router.push('/dashboard');
+      }
+    };
+
+    generateFeedbackIfNeeded();
+  }, [callStatus, type, messages, handleGenerateFeedback, router]);
 
   return (
     <>
       <div className='call-view'>
         <div className='card-interviewer'>
+          <div className='status-container'>
+            <div className={cn('status-badge', callStatus === CallStatus.ACTIVE && 'connected')}>
+              {callStatus === CallStatus.ACTIVE ? 'Connected' : 'Ready'}
+            </div>
+            <div className='quick-controls'>
+              <button
+                onClick={() => setIsMuted(prev => !prev)}
+                title={isMuted ? 'Unmute (M)' : 'Mute (M)'}
+                className='hover:scale-105 transition-transform'
+              >
+                {(isMuted && !isPushToTalkActive) ? '🔇' : '🔊'}
+              </button>
+            </div>
+          </div>
+          <div className='interview-timer'>{formattedDuration}</div>
           <Avatar isSpeaking={isSpeaking} />
           <h3>AI Interviewer</h3>
+          <div className='sm:hidden text-sm text-primary-200/80 mt-1'>{formattedDuration}</div>
+          {callStatus === CallStatus.ACTIVE && (
+            <div className='speaking-indicator'>
+              {isSpeaking ? 'Speaking...' : 'Listening...'}
+            </div>
+          )}
         </div>
         <div className='card-border'>
-          <UserAvatar userName={userName} />
+          <UserAvatar
+            userName={userName}
+            isSpeaking={!isSpeaking && callStatus === CallStatus.ACTIVE && !isMuted}
+            photoURL={photoURL}
+            callStatus={callStatus}
+          />
+        </div>
+        <div className='shortcuts-overlay'>
+          <span>Shortcuts: <kbd>M</kbd> Mute <kbd>Space</kbd> Push-to-talk</span>
         </div>
       </div>
 
-      {messages.length > 0 && (
+      {currentTranscript && (
         <div className='transcript-border'>
           <div className='transcript'>
-            <p key={latestMessage} className={cn('transition-opacity duration-500 opacity-0', 'animate-fadeIn opacity-100')}> 
-              {latestMessage}
-            </p>
+            <p className='text-primary-100'>{currentTranscript}</p>
           </div>
         </div>
       )}
 
-      <div className='w-full flex justify-center'>
+      <div className='w-full flex justify-center mt-8'>
         {callStatus === CallStatus.ACTIVE ? (
           <button className='btn-disconnect' onClick={handleDisconnect}>
             End Call
@@ -338,14 +482,14 @@ const Agent = memo(function Agent({ userName, userId, type, interviewId, questio
             Generating Feedback... Please wait
           </button>
         ) : (
-          <button 
-            className='relative btn-call' 
+          <button
+            className='relative btn-call'
             onClick={handleCall}
             disabled={callStatus === CallStatus.CONNECTING}
           >
             <span className={cn('absolute animate-ping rounded-full opacity-75', callStatus !== CallStatus.CONNECTING && 'hidden')} />
             <span>
-              {isCallInactiveOrFinished ? 'Start Call' : 'Connecting...'} 
+              {isCallInactiveOrFinished ? 'Start Call' : 'Connecting...'}
             </span>
           </button>
         )}
