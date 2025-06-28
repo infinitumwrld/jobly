@@ -15,9 +15,11 @@ import { auth } from "@/firebase/client";
 import { signIn, signUp } from "@/lib/actions/authaction";
 import { useCallback, useState } from "react";
 
+type FormType = "sing-in" | "sing-up";
+
 const authFormSchema = (type : FormType) => {
   return z.object({
-    name: type === "sign-up" ? z.string().min(4) : z.string().optional(),
+    name: type === "sing-up" ? z.string().min(4) : z.string().optional(),
     email: z.string().email(),
     password: z.string().min(7),
   })
@@ -43,7 +45,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     setIsSubmitting(true);
 
     try {
-      if(type === 'sign-up') {
+      if(type === 'sing-up') {
         const {name, email, password} = values
         
         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
@@ -144,7 +146,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
   };
 
-  const isSignIn = type === 'sign-in';
+  const isSignIn = type === 'sing-in';
 
   return (
     <div className="relative rounded-2xl border border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl p-8 max-w-md w-full mx-auto">
